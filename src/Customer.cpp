@@ -2,7 +2,7 @@
 // Created by orly on 11/3/18.
 //
 #include "../include/Customer.h"
-//adi
+
 //constructor
 Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id){}
 
@@ -19,9 +19,9 @@ void Customer::setOrder() {alreadyOrder=true;}
 
 const string Customer::getmyType() { return myType;} ///***
 
-std::vector<int> Customer::getAllMyOrders() { return allMyOrders;} //***
+//std::vector<int> Customer::getAllMyOrders() { return allMyOrders;} //***
 
-void Customer::setAllMyOrders(int newone) {allMyOrders.push_back(newone);}///***
+//void Customer::setAllMyOrders(int newone) {allMyOrders.push_back(newone);}///***
 
 CheapCustomer* CheapCustomer::clone() { return new CheapCustomer(*this);}
 
@@ -48,7 +48,7 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
         }
         if(min!=100000000) {
             setOrder();
-            setAllMyOrders(minid);///***
+            //setAllMyOrders(minid);///***
             return std::vector<int>(minid);
         }
     }
@@ -73,7 +73,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
         }
         setOrder();
         if(id!=-1){
-            setAllMyOrders(id);///***
+            //setAllMyOrders(id);///***
             return std::vector<int>(id);
         }
         return std::vector<int>() ;
@@ -86,7 +86,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
             }
         }
         if(id!=-1){
-            setAllMyOrders(id);///***
+           // setAllMyOrders(id);///***
             return std::vector<int>(id);
         }
         return std::vector<int>() ;
@@ -112,11 +112,11 @@ std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
             }
         }
         if(minid!=100000000) {
-            setAllMyOrders(minid);///***
+           // setAllMyOrders(minid);///***
             v.push_back(minid);
         }
         if(maxid>-1)
-            setAllMyOrders(maxid);///***
+           // setAllMyOrders(maxid);///***
             v.push_back(maxid);
         return v ;
 }
@@ -138,7 +138,7 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
     if(id!=-1){
         alcId=id;
         alcPrice=min;
-        setAllMyOrders(id);///***
+        //setAllMyOrders(id);///***
         return std::vector<int>(id);
     }
     return std::vector<int>();
