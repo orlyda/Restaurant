@@ -14,10 +14,9 @@
 enum ActionStatus{
     PENDING, COMPLETED, ERROR
 };
-extern Restaurant* backup;
 
 //Forward declaration
-class Restaurant;int tableId (0);
+class Restaurant;
 
 class BaseAction{
 public:

@@ -5,7 +5,6 @@
 #define RESTAURANT_H_
 
 #include <vector>
-#include <string>
 #include "Dish.h"
 #include "Table.h"
 #include "Action.h"
@@ -18,7 +17,7 @@ class Restaurant{
 public:
     Restaurant();
     Restaurant(Restaurant &restaurant); ///copy constructor
-    Restaurant(Restaurant &&other){}; //move constructor
+    Restaurant(Restaurant &&other); //move constructor
    // Restaurant&Restaurant::operator={Restaurant && other};
     Restaurant(const std::string &configFilePath);
     void start();
@@ -28,7 +27,6 @@ public:
     void setActionLog(BaseAction* action);//added
     std::vector<Dish>& getMenu();
     std::vector<std::string> split(const std::string &s,char d); ///added
-    std::vector<Table*>& getAllTables();//added
     void closeResturant();///added
     int getCostumerId ();
     void setCostumerId();
