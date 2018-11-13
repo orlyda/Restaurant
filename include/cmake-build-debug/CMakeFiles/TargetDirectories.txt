@@ -1,0 +1,3 @@
+/home/orly/Desktop/Restaurant/include/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/orly/Desktop/Restaurant/include/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/orly/Desktop/Restaurant/include/cmake-build-debug/CMakeFiles/include.dir
