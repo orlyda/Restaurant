@@ -169,11 +169,11 @@ std::string Close::toString() const {
 //Close all - not finished **********
 void CloseAll::act(Restaurant &restaurant) {
     string output;
-    for(int i=0;i<restaurant.getAllTables().size();i++){
-        if(restaurant.getAllTables().at(i)->isOpen()) {
+    for(int i=0;i<restaurant.getNumOfTables();i++){
+        if(restaurant.getTable(i)->isOpen()) {
             output += "Table " + to_string(i) + " was closed. Bill" + to_string(restaurant.getTable(i)->getBill()) +
                       "NIS\n";
-            restaurant.getAllTables().at(i)->closeTable();
+            restaurant.getTable(i)->closeTable();
         }
     }
     restaurant.closeResturant();
