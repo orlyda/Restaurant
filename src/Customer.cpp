@@ -2,7 +2,7 @@
 // Created by orly on 11/3/18.
 //
 #include "../include/Customer.h"
-
+//adi
 //constructor
 Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id){}
 
