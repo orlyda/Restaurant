@@ -3,7 +3,7 @@
 
 using namespace std;
 
-//Restaurant* backup = nullptr;
+Restaurant* backup = nullptr;
 
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -13,10 +13,10 @@ int main(int argc, char** argv) {
     string configurationFile = argv[1];
     Restaurant rest(configurationFile);
     rest.start();
-  /*  if (backup != nullptr) {
+    if (backup != nullptr) {
         delete backup;
         backup = nullptr;
-    }*/
+    }
     return 0;
 }
 

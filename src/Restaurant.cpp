@@ -174,14 +174,14 @@ void Restaurant::start() {
             PrintActionsLog printActionsLog;
             printActionsLog.act(*this);
         }
-       /* else if (theallinput.at(0) == "backup") { //backup resturant
+        else if (theallinput.at(0) == "backup") { //backup resturant
             BackupRestaurant backupRestaurant;
             backupRestaurant.act(*this);
         }
         else if (theallinput.at(0) == "restore") {//restore resturant
             RestoreResturant restoreResturant;
             restoreResturant.act(*this);
-        }*/
+        }
         cin>>input;
     }
     if (input == "closeall") {//closeall

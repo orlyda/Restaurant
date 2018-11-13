@@ -14,7 +14,7 @@
 enum ActionStatus{
     PENDING, COMPLETED, ERROR
 };
-//extern Restaurant* backup;
+extern Restaurant* backup;
 
 //Forward declaration
 class Restaurant;int tableId (0);
@@ -123,7 +123,7 @@ private:
 };
 
 
-/*class BackupRestaurant : public BaseAction {
+class BackupRestaurant : public BaseAction {
 public:
     BackupRestaurant();
     BackupRestaurant* clone();
@@ -139,7 +139,7 @@ public:
     RestoreRest* clone();
     void act(Restaurant &restaurant);
     std::string toString() const;
-};*/
+};
 
 
 #endif
