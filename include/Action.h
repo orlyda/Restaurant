@@ -136,7 +136,7 @@ private:
 class RestoreResturant : public BaseAction {
 public:
     RestoreResturant();
-    RestoreRest* clone();
+    * clone();
     void act(Restaurant &restaurant);
     std::string toString() const;
 };
