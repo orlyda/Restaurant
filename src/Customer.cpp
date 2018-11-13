@@ -39,6 +39,7 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
     if(!alreadyOrdered()) {
         int min = 100000000; //the price of the cheapest dish
         int minid =-1; //the id of the cheapest dish
+        vector<int> v;
         for (int i = 0; i < menu.size(); i++) {
             if (menu[i].getType() != ALC & menu[i].getType() != BVG &
             (menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<minid)))  {
@@ -49,7 +50,8 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
         if(min!=100000000) {
             setOrder();
             //setAllMyOrders(minid);///***
-            return std::vector<int>(minid);
+            v.push_back(minid);
+            return v;
         }
     }
     return std::vector<int>() ;
@@ -64,6 +66,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
     int max=0;
     int min=100000000;
     int id=-1;//the id of the chosen dish
+    vector<int> v;
     if(!alreadyOrdered()) {
         for (int i = 0; i < menu.size(); i++) {
             if (menu[i].getType()==SPC & (menu[i].getPrice() > max |(menu[i].getPrice() ==max & menu[i].getId()<id)) ) {
@@ -74,7 +77,8 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
         setOrder();
         if(id!=-1){
             //setAllMyOrders(id);///***
-            return std::vector<int>(id);
+            v.push_back(id);
+            return v;
         }
         return std::vector<int>() ;
     }
@@ -87,7 +91,8 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
         }
         if(id!=-1){
            // setAllMyOrders(id);///***
-            return std::vector<int>(id);
+           v.push_back(id);
+            return v;
         }
         return std::vector<int>() ;
     }
@@ -128,6 +133,7 @@ AlchoholicCustomer::AlchoholicCustomer(std::string name, int id) :Customer(name,
 std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
     int id=-1;
     int min=10000000;
+    vector<int > v;
     for (int i=0;i<menu.size();i++){
         if (menu[i].getType() == ALC & (menu[i].getPrice()>alcPrice | (menu[i].getPrice()==alcPrice&menu[i].getId()>alcId))
         &(menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<id)))  {
@@ -139,7 +145,8 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
         alcId=id;
         alcPrice=min;
         //setAllMyOrders(id);///***
-        return std::vector<int>(id);
+        v.push_back(id);
+        return v;
     }
     return std::vector<int>();
 
