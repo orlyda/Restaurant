@@ -24,6 +24,7 @@ public:
     virtual void act(Restaurant& restaurant)=0;
     virtual std::string toString() const=0;
     virtual BaseAction* clone()=0;
+    std::string printstatus() const;
 protected:
     void complete();
     void error(std::string errorMsg);

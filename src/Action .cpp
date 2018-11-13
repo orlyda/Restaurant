@@ -14,6 +14,18 @@ BaseAction::BaseAction(): status(PENDING),errorMsg(""){}
 
 ActionStatus BaseAction::getStatus() const { return  status;}
 
+std::string BaseAction::printstatus() const {
+    if(status==PENDING){
+        return "Pending";
+    }
+    if(status==COMPLETED){
+        return "Completed";
+    }
+    if(status==ERROR){
+        return getErrorMsg();
+    }
+}
+
 std::string BaseAction::getErrorMsg() const { return errorMsg;}
 
 void BaseAction::complete() {status=COMPLETED;}
@@ -21,7 +33,7 @@ void BaseAction::complete() {status=COMPLETED;}
 void BaseAction::error(std::string errorMsg) {
     status=ERROR;
     this->errorMsg=errorMsg;
-    cout<< "Error:"+this->errorMsg+"\n";
+    cout<< "Error: "+this->errorMsg+"\n";
 }
 
 std::string BaseAction::toString() const {}; //virtual
@@ -76,7 +88,7 @@ std::string OpenTable::toString() const {
         output+=customers.at(i)->getName()+","+customers.at(i)->getmyType()+" ";
     }
 
-    return output;
+    return output+" "+printstatus()+"\n";
 }
 //end OpenTable
 
@@ -106,7 +118,7 @@ void Order::act(Restaurant &restaurant) {
 }
 
 std::string Order::toString() const {
-    return "order "+to_string(tableId)+"\n";
+    return "order "+to_string(tableId)+" "+printstatus()+"\n";
 }
 //end Order
 
@@ -151,7 +163,7 @@ void MoveCustomer::act(Restaurant &restaurant) {
 }
 
 std::string MoveCustomer::toString() const {
-    return "move "+to_string(srcTable)+" "+to_string(dstTable)+" "+to_string(id)+"\n";
+    return "move "+to_string(srcTable)+" "+to_string(dstTable)+" "+to_string(id)+" "+printstatus()+"\n";
 }
 //end MoveCustomer
 
@@ -173,7 +185,7 @@ void Close::act(Restaurant &restaurant) {
 }
 
 std::string Close::toString() const {
-    return "close "+to_string(tableId)+"\n";
+    return "close "+to_string(tableId)+" "+printstatus()+"\n";
 }
 //end Close
 
@@ -194,7 +206,7 @@ void CloseAll::act(Restaurant &restaurant) {
 }
 
 std::string CloseAll::toString() const {
-    return "closeall\n";
+    return "closeall "+printstatus()+"\n";
 }
 //end Close all
 
@@ -224,7 +236,7 @@ void PrintMenu::act(Restaurant &restaurant) {
 }
 
 std::string PrintMenu::toString() const {
-    return "menu\n";
+    return "menu "+printstatus()+"\n";
 }
 //end Print menu
 
@@ -258,7 +270,7 @@ void PrintTableStatus::act(Restaurant &restaurant) {
 }
 
 std::string PrintTableStatus::toString() const {
-    return "status "+to_string(tableId)+"\n";
+    return "status "+to_string(tableId)+" "+printstatus()+"\n";
 }
 //end Table status
 
@@ -266,23 +278,14 @@ std::string PrintTableStatus::toString() const {
 void PrintActionsLog::act(Restaurant &restaurant) {
     string status;
     for(int i=0;i<restaurant.getActionsLog().size();i++) {
-        if(restaurant.getActionsLog().at(i)->getStatus()==PENDING){
-            status="Pending";
-        }
-        if(restaurant.getActionsLog().at(i)->getStatus()==COMPLETED){
-            status="Completed";
-        }
-        if(restaurant.getActionsLog().at(i)->getStatus()==ERROR) {
-            status = restaurant.getActionsLog().at(i)->getErrorMsg();
-        }
-        cout << restaurant.getActionsLog().at(i)->toString()+" "+ status+"\n";
+        cout << restaurant.getActionsLog().at(i)->toString();
     }
     restaurant.setActionLog(this);
     complete();
 }
 
 std::string PrintActionsLog::toString() const {
-    return "log\n";
+    return "log "+printstatus()+"\n";
 }
 //end Action log
 
@@ -295,7 +298,7 @@ void BackupRestaurant::act(Restaurant &restaurant) {
 }
 
 std::string BackupRestaurant::toString() const {
-    return "backup\n";
+    return "backup "+printstatus()+"\n";
 }
 // end Backup Resturant
 
@@ -307,7 +310,7 @@ void RestoreResturant::act(Restaurant &restaurant) {
 }
 
 std::string RestoreResturant::toString() const {
-    return "restore\n";
+    return "restore "+printstatus()+"\n";
 }
 //end Restore Resturant
 ///
