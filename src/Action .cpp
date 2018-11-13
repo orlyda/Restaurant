@@ -69,7 +69,7 @@ void OpenTable::act(Restaurant &restaurant) {
         complete();
     }
 }
-
+//
 std::string OpenTable::toString() const {
     string output="open "+to_string(tableId)+" ";
 

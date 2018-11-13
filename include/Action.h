@@ -9,7 +9,6 @@
 #include <iostream>
 #include "Customer.h"
 #include "Table.h"
-#include "Restaurant.h"
 
 enum ActionStatus{
     PENDING, COMPLETED, ERROR
@@ -32,7 +31,6 @@ protected:
 private:
     std::string errorMsg;
     ActionStatus status;
-    int tableId;
 };
 
 
@@ -140,6 +138,5 @@ public:
     void act(Restaurant &restaurant);
     std::string toString() const;
 };
-
 
 #endif
