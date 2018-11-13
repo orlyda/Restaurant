@@ -65,7 +65,7 @@ void OpenTable::act(Restaurant &restaurant) {
             restaurant.getTable(tableId)->addCustomer(customers.at(i));
         }
         restaurant.getTable(tableId)->openTable();
-        restaurant.setActionLog(*this);
+        restaurant.setActionLog(this);
         complete();
     }
 }
@@ -158,7 +158,7 @@ void Close::act(Restaurant &restaurant) {
     else{
         thetable.closeTable();
         cout<< "Table "+to_string(tableId)+" was closed. Bill"+to_string(thetable.getBill())+"NIS\n";
-        restaurant.setActionLog(*this);
+        restaurant.setActionLog(this);
         complete();
     }
     delete(&thetable);//??
@@ -194,8 +194,7 @@ std::string CloseAll::toString() const {
 PrintMenu::PrintMenu() {}
 void PrintMenu::act(Restaurant &restaurant) {
     string output;
-    std::vector<Dish> menu;
-    menu=restaurant.getMenu();
+    std::vector<Dish> menu(restaurant.getMenu());
     for(int i=0;i<menu.size();i++){
         string dishType;
         if (menu.at(i).getType()==ALC){
