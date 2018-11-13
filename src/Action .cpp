@@ -49,7 +49,6 @@ BackupRestaurant* BackupRestaurant::clone() { return new BackupRestaurant(*this)
 RestoreResturant* RestoreResturant::clone() { return new RestoreResturant(*this);}
 
 
-
 //OpenTable
 OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id), customers(customersList){
 }
@@ -123,15 +122,24 @@ void MoveCustomer::act(Restaurant &restaurant) {
         error("cannot move customer\n");
     }
     else {
-        for (int i = 0; i < source.getOrders().size(); i++) {
-            if (source.getOrders().at(i).first == source.getCustomer(id)->getId()) {
-                OrderPair p(id, source.getOrders().at(i).second);
-                destintion.setorderspush(p);
-                source.setorderserase(i);///?????
+        vector<OrderPair> temp;
+        for(int i=0;i<source.getOrders().size();i++){
+            temp.push_back(source.getOrders().at(i));
+        }
+        source.getOrders().clear();
+
+        for(int i=0;i<temp.size();i++){
+            if(temp.at(i).first == source.getCustomer(id)->getId()){
+                destintion.getOrders().push_back(temp.at(i));
+            }
+            else {
+                source.getOrders().push_back(temp.at(i));
             }
         }
+        temp.clear();
         destintion.addCustomer(source.getCustomer(id));
         source.removeCustomer(id);
+
         if(source.getCustomers().size()==0){
             destintion.closeTable();
         }
@@ -265,7 +273,7 @@ void PrintActionsLog::act(Restaurant &restaurant) {
             status="Completed";
         }
         if(restaurant.getActionsLog().at(i)->getStatus()==ERROR) {
-            status = "Error:" + restaurant.getActionsLog().at(i)->getErrorMsg();
+            status = restaurant.getActionsLog().at(i)->getErrorMsg();
         }
         cout << restaurant.getActionsLog().at(i)->toString()+" "+ status+"\n";
     }
