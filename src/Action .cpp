@@ -269,7 +269,7 @@ void PrintActionsLog::act(Restaurant &restaurant) {
             status = "Error:" + restaurant.getActionsLog().at(i)->getErrorMsg(); /// ???????????
         }
         cout << restaurant.getActionsLog().at(i)->toString()+" "+ status+"\n";
-    }
+    }//
     restaurant.setActionLog(this);
     complete();
 }
