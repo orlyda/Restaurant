@@ -23,8 +23,6 @@ Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(rest
     }
 }
 
-std::vector<Table*>& Restaurant::getAllTables() { return tables;} ////added
-
 void Restaurant::closeResturant() {open= false;}
 
 void Restaurant::setActionLog(BaseAction* action) { ///added

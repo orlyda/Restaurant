@@ -296,7 +296,7 @@ std::string BackupRestaurant::toString() const {
 void RestoreResturant::act(Restaurant &restaurant) {
     if(backup== nullptr)
         BaseAction::error("No available backup");
-    restaurant.operator=(*backup);
+    restaurant = (*backup);
 }
 
 std::string RestoreResturant::toString() const {
