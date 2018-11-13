@@ -9,7 +9,6 @@
 #include <iostream>
 #include "Customer.h"
 #include "Table.h"
-#include "../include/Restaurant.h"
 
 enum ActionStatus{
     PENDING, COMPLETED, ERROR
@@ -139,6 +138,5 @@ public:
     void act(Restaurant &restaurant);
     std::string toString() const;
 };
-
 
 #endif
