@@ -42,7 +42,7 @@ PrintActionsLog* PrintActionsLog::clone() { return new PrintActionsLog(*this);}
 
 PrintTableStatus* PrintTableStatus::clone() { return new PrintTableStatus(*this);}
 
-//PrintMenu* PrintMenu::clone() { return *PrintMenu(this);}
+PrintMenu* PrintMenu::clone() { return new PrintMenu(*this);}
 
 BackupRestaurant* BackupRestaurant::clone() { return new BackupRestaurant(*this);}
 
@@ -266,10 +266,10 @@ void PrintActionsLog::act(Restaurant &restaurant) {
             status="Completed";
         }
         if(restaurant.getActionsLog().at(i)->getStatus()==ERROR) {
-            status = "Error:" + restaurant.getActionsLog().at(i)->getErrorMsg(); /// ???????????
+            status = "Error:" + restaurant.getActionsLog().at(i)->getErrorMsg();
         }
         cout << restaurant.getActionsLog().at(i)->toString()+" "+ status+"\n";
-    }//
+    }
     restaurant.setActionLog(this);
     complete();
 }
@@ -296,7 +296,7 @@ std::string BackupRestaurant::toString() const {
 void RestoreResturant::act(Restaurant &restaurant) {
     if(backup== nullptr)
         BaseAction::error("No available backup");
-    restaurant = (*backup);
+    restaurant =*backup;
 }
 
 std::string RestoreResturant::toString() const {
