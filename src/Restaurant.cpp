@@ -10,7 +10,7 @@
 
 using namespace std;
 //constructor
-Restaurant::Restaurant():open(false){}
+Restaurant::Restaurant():open(false),costId(0){}
 
 //copy constructor
 Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(restaurant.costId)
@@ -188,7 +188,7 @@ void Restaurant::start() {
     }
 }
 
-int Restaurant::getNumOfTables() const { return tables.size();}
+int Restaurant::getNumOfTables() const { return (int)tables.size();}
 
 Table* Restaurant::getTable(int ind) {
     if (ind<tables.size() | ind>tables.size())
