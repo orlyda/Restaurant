@@ -12,7 +12,9 @@ Table::Table(int t_capacity):
 
 //copy constructor
 Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open) {
-    orderList=std::vector<OrderPair>(t.orderList);
+    for(int i=0;i<t.orderList.size();i++){
+        orderList.emplace_back(t.orderList[i].first,t.orderList[i].second);
+    }
     for(auto i:t.customersList) {
         customersList.push_back(i->clone());
     }
@@ -24,7 +26,10 @@ Table& Table::operator=(const Table& t) {
         capacity = t.getCapacity();
         open = t.open;
         orderList.clear();
-        orderList = std::vector<OrderPair>(t.orderList);
+        orderList.reserve(t.orderList.size());
+        for(int i=0;i<t.orderList.size();i++){
+            orderList.emplace_back(t.orderList[i].first,t.orderList[i].second);
+        }
         customersList.clear();
         for (auto i:t.customersList) {
             customersList.push_back(i->clone());
@@ -41,7 +46,7 @@ Table::~Table() {
 }
 
 //move constructor
-Table::Table(Table &&other):open(other.open),capacity(other.capacity),customersList(other.customersList){
+Table::Table(Table &&other) noexcept:open(other.open),capacity(other.capacity),customersList(other.customersList){
     other.open= false;
     other.capacity=0;
     other.customersList.clear();
@@ -54,7 +59,7 @@ Table::Table(Table &&other):open(other.open),capacity(other.capacity),customersL
 
 
 //move assignment operator
-Table& Table::operator=(Table &&other) {
+Table& Table::operator=(Table &&other) noexcept {
     if(this!=&other){
         customersList.clear();
         orderList.clear();
@@ -67,6 +72,7 @@ Table& Table::operator=(Table &&other) {
             orderList.emplace_back(other.orderList[i].first,other.orderList[i].second);
         }
     }
+    return *this;
 }
 
 

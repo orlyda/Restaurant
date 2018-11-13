@@ -16,8 +16,8 @@ public:
     Table(const Table &newtable);//copy constructor
     Table& operator=(const Table &t); //copy assignment operator
     virtual ~Table();//destructor
-    Table(Table&& other);//move constructor
-    Table& operator=(Table&& other); //move assignment operator
+    Table(Table&& other)noexcept;//move constructor
+    Table& operator=(Table&& other)noexcept; //move assignment operator
     virtual Table* clone();
     int getCapacity() const;
     void addCustomer(Customer* customer);

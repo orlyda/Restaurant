@@ -17,7 +17,9 @@ public:
     Restaurant();
     Restaurant(Restaurant &restaurant); ///copy constructor
     Restaurant(Restaurant &&other); //move constructor
-   // Restaurant&Restaurant::operator={Restaurant && other};
+    Restaurant&operator=(Restaurant&& other);//move assignment operator
+    Restaurant&operator=(const Restaurant& other); //copy assignment operator
+    virtual ~Restaurant();//destructor
     Restaurant(const std::string &configFilePath);
     void start();
     int getNumOfTables() const;

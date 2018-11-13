@@ -22,6 +22,66 @@ Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(rest
         tables.push_back(j->clone());
     }
 }
+//move construstor
+Restaurant::Restaurant(Restaurant &&other):costId(other.costId),open(other.open),
+actionsLog(other.actionsLog),tables(other.tables){
+    for (int i=0;i<other.menu.size();i++){
+        menu.push_back(other.menu[i]);
+    }
+    other.menu.clear();
+    other.tables.clear();
+    other.actionsLog.clear();
+    other.costId=0;
+    other.open=false;
+}
+//move assignment operator
+Restaurant& Restaurant::operator=(Restaurant &&other) {
+    if(this!=&other){
+        menu.clear();
+        tables.clear();
+        actionsLog.clear();
+        menu.reserve(other.menu.size());
+        tables.reserve(other.tables.size());
+        actionsLog.reserve(other.tables.size());
+        costId=other.costId;
+        open=other.open;
+        actionsLog=other.actionsLog;
+        tables=other.tables;
+        for (int i=0;i<other.menu.size();i++){
+            menu.push_back(other.menu[i]);
+        }
+
+    }
+    return *this;
+}
+
+//copy assignment operator
+Restaurant& Restaurant::operator=(const Restaurant &other) {
+    if(this!=&other){
+        open=other.open;
+        costId=other.open;
+        actionsLog.clear();
+        for(auto i:other.actionsLog){
+            actionsLog.push_back(i->clone());
+        }
+        tables.clear();
+        for(auto j:other.tables){
+            tables.push_back(j->clone());
+        }
+        menu.clear();
+        menu.reserve(other.menu.size());
+        menu=other.menu;///*****
+    }
+    return *this;
+}
+
+//destructor
+Restaurant::~Restaurant() {
+    actionsLog.clear();
+    for(auto j:tables)
+        delete(j);
+    menu.clear();
+}
 
 void Restaurant::closeResturant() {open= false;}
 
