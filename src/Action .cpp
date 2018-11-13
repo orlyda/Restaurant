@@ -44,6 +44,9 @@ PrintTableStatus* PrintTableStatus::clone() { return new PrintTableStatus(*this)
 
 //PrintMenu* PrintMenu::clone() { return *PrintMenu(this);}
 
+BackupRestaurant* BackupRestaurant::clone() { return new BackupRestaurant(*this);}
+
+RestoreResturant* RestoreResturant::clone() { return new RestoreResturant(*this);}
 
 
 
