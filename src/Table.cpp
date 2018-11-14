@@ -79,14 +79,12 @@ Table& Table::operator=(Table &&other) noexcept {
 Table* Table::clone() { return new Table(*this);}
 
 void Table::addCustomer(Customer* customer) {
-    if(customersList.begin()-customersList.end()+1<capacity)
-        customersList.push_back(customer);
-    else {};
+    customersList.push_back(customer);
 }
 
 int Table::getCapacity() const { return capacity;}
 
-void Table::setorderspush(OrderPair orderPair) {orderList.push_back(orderPair);}///****
+//void Table::setorderspush(OrderPair orderPair) {orderList.push_back(orderPair);}///****
 
 //void Table::setorderserase(int i) {orderList.erase(orderList.begin()+i);} ///*****
 

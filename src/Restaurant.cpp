@@ -94,12 +94,14 @@ void Restaurant::setActionLog(BaseAction* action) { ///added
 const std::vector<BaseAction*>& Restaurant::getActionsLog() const { return actionsLog;}
 
 Restaurant::Restaurant(const std::string &configFilePath) {
+    costId=0;
+    open=false;
     ifstream myfile(configFilePath);
     string line;
-    int numberOfTabels(0);
+    int numberOfTabels;
     std::vector<string>tablesdescription;
     std::vector<string>menudescription;
-    int idmenu(0);
+    int idmenu=0;
     string name;
     int price;
 
@@ -108,13 +110,13 @@ Restaurant::Restaurant(const std::string &configFilePath) {
             if(line=="#number of tables"){
                 getline(myfile,line);
                 numberOfTabels=std::stoi(line);
-                tables.resize(numberOfTabels);
+                tables.resize((unsigned long)numberOfTabels);
             }
             if(line=="#tables description"){
                 getline(myfile,line);
                 tablesdescription=split(line,',');
                 for(int i=0;i<=tables.size();i++){
-                    Table *table=new Table(std::stoi(tablesdescription.at(i)));
+                    Table *table=new Table(std::stoi(tablesdescription.at((unsigned long)i)));
                     tables.push_back(table);
                 }
                 getline(myfile, line);
@@ -163,9 +165,9 @@ int Restaurant::getCostumerId() { return costId;}
 
 void Restaurant::start() {
     open = true;
-    cout << "Restaurant is now open!";
+    cout << "Restaurant is now open!\n";
     string input;
-    cin >> input;
+    getline(cin,input);
 
     while(input!="closeall") { /// not sure at all, need to read more about getting input in a loop
         vector<string> theallinput=split(input,' ');
@@ -235,7 +237,7 @@ void Restaurant::start() {
             RestoreResturant restoreResturant;
             restoreResturant.act(*this);
         }
-        cin>>input;
+        getline(cin,input);
     }
     if (input == "closeall") {//closeall
         CloseAll closeAll;

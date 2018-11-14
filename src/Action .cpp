@@ -66,14 +66,13 @@ OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id)
 }
 
 void OpenTable::act(Restaurant &restaurant) {
-    if(restaurant.getTable(tableId)->isOpen()
-    |restaurant.getTable(tableId)== nullptr|restaurant.getTable(tableId)->getCapacity()>customers.size()) { //??
+    if(restaurant.getTable(tableId)== nullptr||restaurant.getTable(tableId)->isOpen()) { //??
                 error("Table does not exist or is already open\n");
     }
     else{
         for(int i=0;i<customers.size();i++){
 
-            restaurant.getTable(tableId)->addCustomer(customers.at(i));
+            restaurant.getTable(tableId)->addCustomer(customers.at((unsigned long)i));
         }
         restaurant.getTable(tableId)->openTable();
         restaurant.setActionLog(this);
@@ -152,7 +151,7 @@ void MoveCustomer::act(Restaurant &restaurant) {
         destintion.addCustomer(source.getCustomer(id));
         source.removeCustomer(id);
 
-        if(source.getCustomers().size()==0){
+        if(source.getCustomers().empty()){
             destintion.closeTable();
         }
         restaurant.setActionLog(this);
