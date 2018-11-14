@@ -70,7 +70,9 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
         }
         menu.clear();
         menu.reserve(other.menu.size());
-        menu=other.menu;///*****
+        for(auto k:other.menu){
+            menu.emplace_back(k);
+        }
     }
     return *this;
 }

@@ -31,7 +31,7 @@ public:
     int getBill();
     bool isOpen();
     void setorderspush(OrderPair orderPair);//***
-    void setorderserase(int i);//***
+   // void setorderserase(int i);//***
 private:
     int capacity;
     bool open;

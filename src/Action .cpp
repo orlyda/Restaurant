@@ -189,7 +189,8 @@ std::string Close::toString() const {
 }
 //end Close
 
-//Close all - not finished **********
+//Close all
+CloseAll::CloseAll() {}
 void CloseAll::act(Restaurant &restaurant) {
     string output;
     for(int i=0;i<restaurant.getNumOfTables();i++){
@@ -275,6 +276,7 @@ std::string PrintTableStatus::toString() const {
 //end Table status
 
 //Print Action log
+PrintActionsLog::PrintActionsLog() {}
 void PrintActionsLog::act(Restaurant &restaurant) {
     string status;
     for(int i=0;i<restaurant.getActionsLog().size();i++) {
@@ -290,7 +292,7 @@ std::string PrintActionsLog::toString() const {
 //end Action log
 
 //Backup Resturant
-BackupRestaurant::BackupRestaurant() {}
+BackupRestaurant::BackupRestaurant(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
     backup = new Restaurant(restaurant); //// ?????
@@ -303,6 +305,8 @@ std::string BackupRestaurant::toString() const {
 // end Backup Resturant
 
 //Restore Resturant
+RestoreResturant::RestoreResturant(){}
+
 void RestoreResturant::act(Restaurant &restaurant) {
     if(backup== nullptr)
         BaseAction::error("No available backup");

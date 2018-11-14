@@ -88,7 +88,7 @@ int Table::getCapacity() const { return capacity;}
 
 void Table::setorderspush(OrderPair orderPair) {orderList.push_back(orderPair);}///****
 
-void Table::setorderserase(int i) {orderList.erase(orderList.begin()+i);} ///*****
+//void Table::setorderserase(int i) {orderList.erase(orderList.begin()+i);} ///*****
 
 Customer* Table::getCustomer(int id) {
     int i=0;
@@ -139,7 +139,7 @@ void Table::order(const std::vector<Dish> &menu) {
     while(customersList[i]!= nullptr)
     {
         dish=customersList[i]->order(menu);
-        if(dish.size()>=1) {
+        if(!dish.empty()) {
             while(j<menu.size()&dish[0]!=menu[j].getId())
                 j++;
             std::pair<int,Dish > p(customersList[i]->getId(),menu[j]);
