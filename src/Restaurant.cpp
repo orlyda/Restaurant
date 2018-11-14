@@ -168,15 +168,9 @@ void Restaurant::start() {
     cin >> input;
 
     while(input!="closeall") { /// not sure at all, need to read more about getting input in a loop
-        vector<string> theallinput;
-        ifstream theinput(input);
-        string str;
+        vector<string> theallinput=split(input,' ');
 
-        while (theinput >> str) { // Will read up to eof() and stop at every whitespace it hits.
-            theallinput.push_back(str);
-        }
-
-        if (theallinput.at(0) == "open") { //opentable *** not finished
+        if (theallinput.at(0) == "open") { //opentable
             int id = stoi(theallinput.at(1));
             vector<Customer *> customerlist;
 
@@ -200,7 +194,6 @@ void Restaurant::start() {
                     customerlist.push_back(&cheapCustomer);
                 }
             }
-
             OpenTable openTable(id,customerlist);
             openTable.act(*this);
         }

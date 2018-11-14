@@ -24,5 +24,4 @@ private:
     const DishType type;
 };
 
-
 #endif
