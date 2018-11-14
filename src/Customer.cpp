@@ -1,6 +1,8 @@
 //
 // Created by orly on 11/3/18.
 //
+#include <Customer.h>
+
 #include "../include/Customer.h"
 
 //constructor
@@ -56,6 +58,12 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
     }
     return std::vector<int>() ;
 }
+
+std::string CheapCustomer::toString() const {
+    return std::to_string(this->getId())+" "+this->getName();
+}
+
+std::string SpicyCustomer::toString() const {}
 
 
 SpicyCustomer::SpicyCustomer(std::string name, int id): Customer(name,id){//added
@@ -126,6 +134,10 @@ std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
         return v ;
 }
 
+std::string VegetarianCustomer::toString() const {
+    return std::to_string(this->getId())+" "+this->getName();
+}
+
 AlchoholicCustomer::AlchoholicCustomer(std::string name, int id) :Customer(name,id),alcPrice(-1),alcId(-1){
     myType="alc";
 }
@@ -150,4 +162,8 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
     }
     return std::vector<int>();
 
+}
+
+std::string AlchoholicCustomer::toString() const {
+    return std::to_string(this->getId())+" "+this->getName();
 }
