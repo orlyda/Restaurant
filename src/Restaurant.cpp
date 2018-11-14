@@ -96,7 +96,7 @@ const std::vector<BaseAction*>& Restaurant::getActionsLog() const { return actio
 Restaurant::Restaurant(const std::string &configFilePath) {
     costId=0;
     open=false;
-    ifstream myfile(configFilePath);
+    ifstream myfile(configFilePath,ios::in);
     string line;
     int numberOfTabels;
     std::vector<string>tablesdescription;
@@ -104,9 +104,9 @@ Restaurant::Restaurant(const std::string &configFilePath) {
     int idmenu=0;
     string name;
     int price;
-
     if (myfile.is_open()){
         while (getline(myfile,line)){
+            if(line.empty()||line=="\r") continue;
             if(line=="#number of tables"){
                 getline(myfile,line);
                 numberOfTabels=std::stoi(line);
@@ -122,27 +122,27 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                 getline(myfile, line);
             }
             if(line=="#Menu") {
-                menudescription = split(line,',');
-                name = menudescription.at(0);
-                price = std::stoi(menudescription.at(2));
+                while (getline(myfile,line)) {
+                    if (line == "") continue;
+                    menudescription = split(line, ',');
+                    name = menudescription.at(0);
+                    price = std::stoi(menudescription.at(2));
 
-                if (menudescription.at(0) == "ALC") {
-                    Dish dish(idmenu, name, price, ALC);
-                    menu.push_back(dish);
+                    if (menudescription.at(1) == "ALC") {
+                        Dish dish(idmenu, name, price, ALC);
+                        menu.push_back(dish);
+                    } else if (menudescription.at(1) == "BVG") {
+                        Dish dish(idmenu, name, price, BVG);
+                        menu.push_back(dish);
+                    } else if (menudescription.at(1) == "VEG") {
+                        Dish dish(idmenu, name, price, VEG);
+                        menu.push_back(dish);
+                    } else if (menudescription.at(1) == "SPC") {
+                        Dish dish(idmenu, name, price, SPC);
+                        menu.push_back(dish);
+                    }
+                    idmenu++;
                 }
-                else if (menudescription.at(0) == "BVG") {
-                    Dish dish(idmenu, name, price, BVG);
-                    menu.push_back(dish);
-                }
-                else if (menudescription.at(0) == "VEG") {
-                    Dish dish(idmenu, name, price, VEG);
-                    menu.push_back(dish);
-                }
-                else if (menudescription.at(0) == "SPC") {
-                    Dish dish(idmenu, name, price, SPC);
-                    menu.push_back(dish);
-                }
-                idmenu++;
             }
         }
     }
@@ -202,7 +202,7 @@ void Restaurant::start() {
         else if (theallinput.at(0) == "order") { //order
             int id = stoi(theallinput.at(1));
             Order order(id);
-            order.act(*this); //why only works with * ??
+            order.act(*this);
         }
         else if (theallinput.at(0) == "move") {//move customer
             int src=stoi(theallinput.at(1));
