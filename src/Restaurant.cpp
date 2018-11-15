@@ -104,17 +104,22 @@ Restaurant::Restaurant(const std::string &configFilePath) {
     int idmenu=0;
     string name;
     int price;
+    int whichLine=0;
     if (myfile.is_open()){
         while (getline(myfile,line)){
             if(line.empty()||line=="\r") continue;
-            if(line=="#number of tables"){
+            if(line=="#number of tables"|line=="#number of tables\r"){
                 getline(myfile,line);
-                numberOfTabels=std::stoi(line);
+                if(line.substr(line.size()-1)=="\r")
+                    numberOfTabels=std::stoi(line.substr(0,line.size()-1));
+                else numberOfTabels=std::stoi(line);
             }
             getline(myfile,line);
-            if(line=="#tables description"){
-                while(line.empty()||line=="\r") continue;
+            if(line=="#tables description"|line=="#tables description\r"){
                 getline(myfile,line);
+                if(line.empty()||line=="\r") continue;
+                if(line.substr(line.size()-1)=="\r")
+                    line=line.substr(0,line.size()-1);
                 tablesdescription = split(line, ',');
                     for (int i = 0; i < numberOfTabels; i++) {
                         Table *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
@@ -122,10 +127,11 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                     }
             }
             getline(myfile,line);
-            if(line=="#Menu") {
-                while(line.empty()||line=="\r") continue;
+            if(line=="#Menu"|line=="#Menu\r") {
                 while (getline(myfile,line)) {
-                    if (line == "") continue;
+                    if(line.empty()||line=="\r") continue;
+                    if(line.substr(line.size()-1)=="\r")
+                        line=line.substr(0,line.size()-1);
                     menudescription = split(line, ',');
                     name = menudescription.at(0);
                     price = std::stoi(menudescription.at(2));
