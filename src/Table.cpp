@@ -136,7 +136,7 @@ void Table::order(const std::vector<Dish> &menu) {
     std::vector<int> dish;
     while(customersList[i]!= nullptr)
     {
-        dish=customersList[i]->order(menu);
+        dish=customersList[i]->order(menu); ///********
         if(!dish.empty()) {
             while(j<menu.size()&dish[0]!=menu[j].getId())
                 j++;
