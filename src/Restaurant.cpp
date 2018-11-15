@@ -110,22 +110,21 @@ Restaurant::Restaurant(const std::string &configFilePath) {
             if(line=="#number of tables"){
                 getline(myfile,line);
                 numberOfTabels=std::stoi(line);
-               // tables.resize((unsigned long)numberOfTabels);
             }
+            getline(myfile,line);
             if(line=="#tables description"){
-                while (line!="") {
+              // while (line!="") {
                     getline(myfile,line);
                     tablesdescription = split(line, ',');
                     for (int i = 0; i < numberOfTabels; i++) {
                         Table *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
                         tables.push_back(table);
                     }
-                }
+            //   }
             }
             getline(myfile,line);
             if(line=="#Menu") {
                 while (getline(myfile,line)) {
-                    getline(myfile,line);
                     if (line == "") continue;
                     menudescription = split(line, ',');
                     name = menudescription.at(0);
