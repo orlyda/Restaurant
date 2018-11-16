@@ -4,6 +4,8 @@
 #include <Customer.h>
 
 #include "../include/Customer.h"
+#include <iostream>
+using namespace std;
 
 //constructor
 Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id),alreadyOrder(false){}
@@ -53,6 +55,7 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
             setOrder();
             //setAllMyOrders(minid);///***
             v.push_back(minid);
+            cout<<getName()+" ordered "+menu.at(minid).getName()<<'\n';
             return v;
         }
     }
@@ -84,7 +87,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
         }
         setOrder();
         if(id!=-1){
-            //setAllMyOrders(id);///***
+            cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
             v.push_back(id);
             return v;
         }
@@ -98,8 +101,8 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
             }
         }
         if(id!=-1){
-           // setAllMyOrders(id);///***
-           v.push_back(id);
+            cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
+            v.push_back(id);
             return v;
         }
         return std::vector<int>() ;
@@ -127,9 +130,11 @@ std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
         if(minid!=100000000) {
            // setAllMyOrders(minid);///***
             v.push_back(minid);
+            cout<<getName()+" ordered "+menu.at(minid).getName()<<'\n';
         }
         if(maxid>-1)
            // setAllMyOrders(maxid);///***
+            cout<<getName()+" ordered "+menu.at(maxid).getName()<<'\n';
             v.push_back(maxid);
         return v ;
 }
@@ -157,6 +162,7 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
         alcId=id;
         alcPrice=min;
         //setAllMyOrders(id);///***
+        cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
         v.push_back(id);
         return v;
     }

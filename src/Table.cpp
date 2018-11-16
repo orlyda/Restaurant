@@ -131,44 +131,26 @@ bool Table::isOpen() {return open;}
 
 
 void Table::order(const std::vector<Dish> &menu) {
-    int i=0;
-    int j=0;
+    //int j=0;
     std::vector<int> dish;
 
-    while(customersList[i]!= nullptr)
+    for(int i=0;i<customersList.size();i++)
     {
-       // dish=customersList[i]->order(menu);
-       if (customersList.at(i)->getmyType()=="alc"){
-            AlchoholicCustomer *alc= new  AlchoholicCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
-            dish=alc->order(menu);
-        }
-        if(customersList.at(i)->getmyType()=="veg"){
-            VegetarianCustomer *veg=new  VegetarianCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
-            dish=veg->order(menu);
-        }
-        if(customersList.at(i)->getmyType()=="spc"){
-            SpicyCustomer *spc=new SpicyCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
-            dish=spc->order(menu);
-        }
-        if(customersList.at(i)->getmyType()=="chp"){
-            CheapCustomer *chp=new CheapCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
-            dish=chp->order(menu);
-        }
+        dish=customersList[i]->order(menu);
         if(!dish.empty()) {
-            while(j<menu.size()&dish[0]!=menu[j].getId())
-                j++;
-            std::pair<int,Dish > p(customersList[i]->getId(),menu[j]);
-            orderList.push_back(p);
+            /*while(j<menu.size()&dish[0]!=menu[j].getId())
+                j++;*/
+            for(int j=0; j<dish.size(); j++) {
+                std::pair<int, Dish> p(customersList[i]->getId(), menu[dish.at(j)]);
+                orderList.push_back(p);
+            }
         }
-        if(dish.size()==2){
+        /*if(dish.size()==2){
             while(j<menu.size()&dish[1]!=menu[j].getId())
                 j++;
             std::pair<int,Dish > p(customersList[i]->getId(),menu[j]);
             orderList.push_back(p);
-        }
-        i++;
-
+        }*/
     }
-
 }
 

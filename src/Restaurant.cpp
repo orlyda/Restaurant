@@ -157,6 +157,7 @@ Restaurant::Restaurant(const std::string &configFilePath) {
     myfile.close();
 }
 
+
 std::vector<std::string> Restaurant::split(const std::string &s, char d) {
     std::vector<std::string> parts;
     std::string part;
@@ -187,21 +188,21 @@ void Restaurant::start() {
             for (int i = 2; i < theallinput.size(); i++) {
                 vector<string> customerandtype = split(theallinput.at(i), ',');
                 if (customerandtype.at(1) == "veg") {
-                    VegetarianCustomer vegetarianCustomerustomer(customerandtype.at(0), getCostumerId());
+                    VegetarianCustomer *vegetarianCustomerustomer=new VegetarianCustomer(customerandtype.at(0), getCostumerId());
                     setCostumerId();
-                    customerlist.push_back(&vegetarianCustomerustomer);
+                    customerlist.push_back(vegetarianCustomerustomer);
                 } else if (customerandtype.at(1) == "spc") {
-                    SpicyCustomer spicyCustomer(customerandtype.at(0), getCostumerId());
+                    SpicyCustomer *spicyCustomer=new SpicyCustomer(customerandtype.at(0), getCostumerId());
                     setCostumerId();
-                    customerlist.push_back(&spicyCustomer);
+                    customerlist.push_back(spicyCustomer);
                 } else if (customerandtype.at(1) == "alc") {
-                    AlchoholicCustomer alchoholicCustomer(customerandtype.at(0), getCostumerId());
+                    AlchoholicCustomer *alchoholicCustomer=new  AlchoholicCustomer(customerandtype.at(0), getCostumerId());
                     setCostumerId();
-                    customerlist.push_back(&alchoholicCustomer);
+                    customerlist.push_back(alchoholicCustomer);
                 } else if (customerandtype.at(1) == "chp") {
-                    CheapCustomer cheapCustomer(customerandtype.at(0), getCostumerId());
+                    CheapCustomer *cheapCustomer=new CheapCustomer(customerandtype.at(0), getCostumerId());
                     setCostumerId();
-                    customerlist.push_back(&cheapCustomer);
+                    customerlist.push_back(cheapCustomer);
                 }
             }
             OpenTable *openTable=new OpenTable(id,customerlist);
@@ -229,7 +230,7 @@ void Restaurant::start() {
             printMenu->act(*this);
         }
         else if (theallinput.at(0) == "status") { //print table status
-            int id=stoi(theallinput.at(0));
+            int id=stoi(theallinput.at(1));
             PrintTableStatus *printTableStatus=new PrintTableStatus(id);
             printTableStatus->act(*this);
         }

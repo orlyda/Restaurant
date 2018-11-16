@@ -94,12 +94,13 @@ std::string OpenTable::toString() const {
 Order::Order(int id):tableId(id){}
 
 void Order::act(Restaurant &restaurant) {
-    string output;
+   // string output;
     if(!restaurant.getTable(tableId)->isOpen() || restaurant.getTable(tableId)== nullptr) {
         error("Table does not exist or is already open\n");
     }
     else{
         restaurant.getTable(tableId)->order(restaurant.getMenu());
+        /*
         int customerid;
         string namecustomer;
         string dishcustomer;
@@ -109,8 +110,9 @@ void Order::act(Restaurant &restaurant) {
             dishcustomer=restaurant.getTable(tableId)->getOrders().at(i).second.getName();
             output+=namecustomer+" ordered "+dishcustomer+"\n";
         }
+         */
         restaurant.setActionLog(this);
-        cout<< output;
+     //   cout<< output;
         complete();
     }
 }
@@ -156,8 +158,8 @@ void MoveCustomer::act(Restaurant &restaurant) {
         restaurant.setActionLog(this);
         complete();
     }
-    delete(&source);//??
-    delete(&destintion);//??
+    //delete(&source);//??
+    //delete(&destintion);//??
 }
 
 std::string MoveCustomer::toString() const {
@@ -265,7 +267,7 @@ void PrintTableStatus::act(Restaurant &restaurant) {
     }
     restaurant.setActionLog(this);
     complete();
-    delete(&thetable);//??
+    //delete(&thetable);//??
 }
 
 std::string PrintTableStatus::toString() const {
