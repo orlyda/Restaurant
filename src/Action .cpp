@@ -86,7 +86,7 @@ std::string OpenTable::toString() const {
         output+=customers.at(i)->getName()+","+customers.at(i)->getmyType()+" ";
     }
 
-    return output+" "+printstatus()+"\n";
+    return output+printstatus()+"\n";
 }
 //end OpenTable
 
