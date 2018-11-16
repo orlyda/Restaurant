@@ -6,7 +6,7 @@
 #include "../include/Customer.h"
 
 //constructor
-Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id){}
+Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id),alreadyOrder(false){}
 
 //copy constructor
 Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {}

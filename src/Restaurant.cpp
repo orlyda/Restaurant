@@ -204,52 +204,52 @@ void Restaurant::start() {
                     customerlist.push_back(&cheapCustomer);
                 }
             }
-            OpenTable openTable(id,customerlist);
-            openTable.act(*this);
+            OpenTable *openTable=new OpenTable(id,customerlist);
+            openTable->act(*this);
         }
         else if (theallinput.at(0) == "order") { //order
             int id = stoi(theallinput.at(1));
-            Order order(id);
-            order.act(*this);
+            Order *order=new Order(id);
+            order->act(*this);
         }
         else if (theallinput.at(0) == "move") {//move customer
             int src=stoi(theallinput.at(1));
             int dts=stoi(theallinput.at(2));
             int id=stoi(theallinput.at(3));
-            MoveCustomer moveCustomer(src,dts,id);
-            moveCustomer.act(*this);
+            MoveCustomer *moveCustomer=new MoveCustomer(src,dts,id);
+            moveCustomer->act(*this);
         }
         else if (theallinput.at(0) == "close") {//close
             int id=stoi(theallinput.at(1));
-            Close close(id);
-            close.act(*this);
+            Close *close=new Close(id);
+            close->act(*this);
         }
         else if (theallinput.at(0) == "menu") { //print menu
-            PrintMenu printMenu;
-            printMenu.act(*this);
+            PrintMenu *printMenu=new PrintMenu();
+            printMenu->act(*this);
         }
         else if (theallinput.at(0) == "status") { //print table status
             int id=stoi(theallinput.at(0));
-            PrintTableStatus printTableStatus(id);
-            printTableStatus.act(*this);
+            PrintTableStatus *printTableStatus=new PrintTableStatus(id);
+            printTableStatus->act(*this);
         }
         else if (theallinput.at(0) == "log") { //print actions log
-            PrintActionsLog printActionsLog;
-            printActionsLog.act(*this);
+            PrintActionsLog *printActionsLog=new PrintActionsLog();
+            printActionsLog->act(*this);
         }
         else if (theallinput.at(0) == "backup") { //backup resturant
-            BackupRestaurant backupRestaurant;
-            backupRestaurant.act(*this);
+            BackupRestaurant *backupRestaurant=new  BackupRestaurant();
+            backupRestaurant->act(*this);
         }
         else if (theallinput.at(0) == "restore") {//restore resturant
-            RestoreResturant restoreResturant;
-            restoreResturant.act(*this);
+            RestoreResturant *restoreResturant=new  RestoreResturant();
+            restoreResturant->act(*this);
         }
         getline(cin,input);
     }
     if (input == "closeall") {//closeall
-        CloseAll closeAll;
-        closeAll.act(*this);
+        CloseAll *closeAll=new CloseAll();
+        closeAll->act(*this);
     }
 }
 

@@ -134,9 +134,26 @@ void Table::order(const std::vector<Dish> &menu) {
     int i=0;
     int j=0;
     std::vector<int> dish;
+
     while(customersList[i]!= nullptr)
     {
-        dish=customersList[i]->order(menu); ///*******
+       // dish=customersList[i]->order(menu);
+       if (customersList.at(i)->getmyType()=="alc"){
+            AlchoholicCustomer *alc= new  AlchoholicCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
+            dish=alc->order(menu);
+        }
+        if(customersList.at(i)->getmyType()=="veg"){
+            VegetarianCustomer *veg=new  VegetarianCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
+            dish=veg->order(menu);
+        }
+        if(customersList.at(i)->getmyType()=="spc"){
+            SpicyCustomer *spc=new SpicyCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
+            dish=spc->order(menu);
+        }
+        if(customersList.at(i)->getmyType()=="chp"){
+            CheapCustomer *chp=new CheapCustomer(customersList.at(i)->getName(),customersList.at(i)->getId());
+            dish=chp->order(menu);
+        }
         if(!dish.empty()) {
             while(j<menu.size()&dish[0]!=menu[j].getId())
                 j++;
@@ -152,5 +169,6 @@ void Table::order(const std::vector<Dish> &menu) {
         i++;
 
     }
+
 }
 
