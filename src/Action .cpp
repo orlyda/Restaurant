@@ -172,7 +172,7 @@ Close::Close(int id):tableId(id){}
 
 void Close::act(Restaurant &restaurant) {
     Table thetable =*(restaurant.getTable(tableId));////?>>
-    if(thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
+    if(!thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
         error("Table does not exist or is already open\n");
     }
     else{
@@ -181,7 +181,7 @@ void Close::act(Restaurant &restaurant) {
         restaurant.setActionLog(this);
         complete();
     }
-    delete(&thetable);//??
+   // delete(&thetable);//??
 }
 
 std::string Close::toString() const {
