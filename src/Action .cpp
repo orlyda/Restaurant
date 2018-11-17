@@ -15,13 +15,13 @@ BaseAction::BaseAction(): status(PENDING),errorMsg(""){}
 ActionStatus BaseAction::getStatus() const { return  status;}
 
 std::string BaseAction::printstatus() const {
-    if(status==PENDING){
+    if(getStatus()==PENDING){
         return "Pending";
     }
-    if(status==COMPLETED){
+    if(getStatus()==COMPLETED){
         return "Completed";
     }
-    if(status==ERROR){
+    if(getStatus()==ERROR){
         return getErrorMsg();
     }
 }
@@ -35,10 +35,6 @@ void BaseAction::error(std::string errorMsg) {
     this->errorMsg=errorMsg;
     cout<< "Error: "+this->errorMsg<<'\n';
 }
-
-std::string BaseAction::toString() const {}; //virtual
-
-void BaseAction::act(Restaurant &restaurant){}; //virtual
 
 OpenTable* OpenTable::clone() { return new OpenTable(*this);}
 
@@ -83,8 +79,8 @@ void OpenTable::act(Restaurant &restaurant) {
 std::string OpenTable::toString() const {
     string output="open "+to_string(tableId)+" ";
 
-    for(int i=0;i<customers.size();i++){
-        output+=customers.at(i)->getName()+","+customers.at(i)->getmyType()+" ";
+    for(auto & c:customers){
+        output+=c->getName()+","+c->getmyType()+" ";
     }
 
     return output+printstatus()+"\n";
@@ -138,8 +134,8 @@ void MoveCustomer::act(Restaurant &restaurant) {
     else {
         vector<OrderPair> temp;
 
-        for(int i=0;i<source.getOrders().size();i++){
-            temp.push_back(source.getOrders().at((unsigned long)i));
+        for(auto & s:source.getOrders()){
+            temp.push_back(s);
         }
         source.getOrders().clear();
 
@@ -173,9 +169,9 @@ std::string MoveCustomer::toString() const {
 Close::Close(int id):tableId(id){}
 
 void Close::act(Restaurant &restaurant) {
-    Table thetable =*(restaurant.getTable(tableId));////?>>
+    Table &thetable =*(restaurant.getTable(tableId));////?>>
     if(!thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
-        error("Table does not exist or is already open");
+        error("Table does not exist or is not open");
         restaurant.setActionLog(this);
     }
     else{
