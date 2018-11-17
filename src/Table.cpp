@@ -137,15 +137,15 @@ void Table::order(const std::vector<Dish> &menu) {
     for(int i=0;i<customersList.size();i++)
     {
         dish=customersList[i]->order(menu);
-        if(!dish.empty()) {
-            /*while(j<menu.size()&dish[0]!=menu[j].getId())
-                j++;*/
-            for(int j=0; j<dish.size(); j++) {
-                std::pair<int, Dish> p(customersList[i]->getId(), menu[dish.at(j)]);
-                orderList.push_back(p);
-            }
+        for(int j=0; j<dish.size(); j++) {
+            std::pair<int, Dish> p(customersList[i]->getId(), menu[dish.at(j)]);
+            orderList.push_back(p);
         }
-        /*if(dish.size()==2){
+       /*if(!dish.empty()) {
+            /*while(j<menu.size()&dish[0]!=menu[j].getId())
+                j++;
+        }
+         if(dish.size()==2){
             while(j<menu.size()&dish[1]!=menu[j].getId())
                 j++;
             std::pair<int,Dish > p(customersList[i]->getId(),menu[j]);
