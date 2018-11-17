@@ -42,7 +42,9 @@ Table& Table::operator=(const Table& t) {
 Table::~Table() {
     for (auto &i : customersList) {
         delete i;
+        i= nullptr;
     }
+    orderList.clear();
 }
 
 //move constructor

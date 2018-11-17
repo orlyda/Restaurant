@@ -180,7 +180,7 @@ void Close::act(Restaurant &restaurant) {
         complete();
     }
 }
-//
+
 std::string Close::toString() const {
     return "close "+to_string(tableId)+" "+printstatus()+"\n";
 }
@@ -294,11 +294,13 @@ BackupRestaurant::BackupRestaurant():BaseAction(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
     if (backup != nullptr) {
-        delete backup;
-        backup = nullptr;
+        //backup=&restaurant;
+        delete(backup);
+        backup= nullptr;
     }
-
+    //else
     backup = new Restaurant(restaurant); //// ?????
+
     restaurant.setActionLog(this);
     complete();
 }

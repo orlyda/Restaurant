@@ -14,7 +14,7 @@ Restaurant::Restaurant():open(false),costId(0){}
 
 //copy constructor
 Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(restaurant.costId)
-,tables(restaurant.tables),menu(restaurant.menu) {
+,menu(restaurant.menu) {
     for(auto i:restaurant.actionsLog){
         actionsLog.push_back(i->clone());
     }
@@ -60,20 +60,11 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
     if(this!=&other){
         open=other.open;
         costId=other.open;
-        actionsLog.clear();
         for(auto i:other.actionsLog){
             actionsLog.push_back(i->clone());
         }
-        for (auto a:tables){
-            a->closeTable();
-        }
-        for(auto j:other.tables){
-            tables.push_back(j->clone());
-        }
-        menu.clear();
-        menu.reserve(other.menu.size());
-        for(auto k:other.menu){
-            menu.emplace_back(k);
+        for(int j=0;j<tables.size();j++){
+            tables[j]=other.tables[j];
         }
     }
     return *this;
@@ -81,9 +72,12 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
 
 //destructor
 Restaurant::~Restaurant() {
-    actionsLog.clear();
-    for(auto j:tables)
-        delete(j);
+   /* for(auto i:actionsLog)
+        delete(i);*/
+   actionsLog.clear();
+    for(auto j:tables) {
+        delete j;
+    }
     menu.clear();
 }
 
@@ -242,6 +236,7 @@ void Restaurant::start() {
             printActionsLog->act(*this);
         }
         else if (theallinput.at(0) == "backup") { //backup resturant
+
             auto *backupRestaurant=new  BackupRestaurant();
             backupRestaurant->act(*this);
         }
@@ -254,6 +249,7 @@ void Restaurant::start() {
     if (input == "closeall") {//closeall
         auto *closeAll=new CloseAll();
         closeAll->act(*this);
+        delete(this);
     }
 }
 
