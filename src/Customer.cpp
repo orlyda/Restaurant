@@ -45,8 +45,7 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
         int minid =-1; //the id of the cheapest dish
         vector<int> v;
         for (int i = 0; i < menu.size(); i++) {
-            if (menu[i].getType() != ALC & menu[i].getType() != BVG &
-            (menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<minid)))  {
+            if (menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<minid))  {
                 min = menu[i].getPrice();
                 minid = menu[i].getId();
             }

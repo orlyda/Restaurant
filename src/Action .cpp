@@ -181,7 +181,7 @@ void Close::act(Restaurant &restaurant) {
     }
     else{
         thetable.closeTable();
-        cout<< "Table "+to_string(tableId)+" was closed. Bill"+to_string(thetable.getBill())+"NIS\n";
+        cout<< "Table "+to_string(tableId)+" was closed. Bill "+to_string(thetable.getBill())+"NIS\n";
         restaurant.setActionLog(this);
         complete();
     }
