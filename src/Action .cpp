@@ -33,7 +33,7 @@ void BaseAction::complete() {status=COMPLETED;}
 void BaseAction::error(std::string errorMsg) {
     status=ERROR;
     this->errorMsg=errorMsg;
-    cout<< "Error: "+this->errorMsg+"\n";
+    cout<< "Error: "+this->errorMsg<<'\n';
 }
 
 std::string BaseAction::toString() const {}; //virtual
@@ -67,7 +67,8 @@ OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id)
 
 void OpenTable::act(Restaurant &restaurant) {
     if(restaurant.getTable(tableId)== nullptr||restaurant.getTable(tableId)->isOpen()) {
-                error("Table does not exist or is already open\n");
+        error("Table does not exist or is already open\n");
+        restaurant.setActionLog(this);
     }
     else{
         for(int i=0;i<customers.size();i++){
@@ -97,6 +98,7 @@ void Order::act(Restaurant &restaurant) {
    // string output;
     if(!restaurant.getTable(tableId)->isOpen() || restaurant.getTable(tableId)== nullptr) {
         error("Table does not exist or is already open\n");
+        restaurant.setActionLog(this);
     }
     else{
         restaurant.getTable(tableId)->order(restaurant.getMenu());
@@ -132,6 +134,7 @@ void MoveCustomer::act(Restaurant &restaurant) {
             source.getCustomer(id)== nullptr |
             source.getCustomers().size()+1>destintion.getCapacity()){
         error("cannot move customer\n");
+        restaurant.setActionLog(this);
     }
     else {
         vector<OrderPair> temp;
@@ -174,6 +177,7 @@ void Close::act(Restaurant &restaurant) {
     Table thetable =*(restaurant.getTable(tableId));////?>>
     if(!thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
         error("Table does not exist or is already open\n");
+        restaurant.setActionLog(this);
     }
     else{
         thetable.closeTable();
@@ -195,7 +199,7 @@ void CloseAll::act(Restaurant &restaurant) {
     string output;
     for(int i=0;i<restaurant.getNumOfTables();i++){
         if(restaurant.getTable(i)->isOpen()) {
-            output += "Table " + to_string(i) + " was closed. Bill" + to_string(restaurant.getTable(i)->getBill()) +
+            output += "Table " + to_string(i) + " was closed. Bill " + to_string(restaurant.getTable(i)->getBill()) +
                       "NIS\n";
             restaurant.getTable(i)->closeTable();
         }
@@ -296,6 +300,7 @@ BackupRestaurant::BackupRestaurant(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
     backup = new Restaurant(restaurant); //// ?????
+    restaurant.setActionLog(this);
     complete();
 }
 
@@ -308,9 +313,12 @@ std::string BackupRestaurant::toString() const {
 RestoreResturant::RestoreResturant(){}
 
 void RestoreResturant::act(Restaurant &restaurant) {
-    if(backup== nullptr)
+    if(backup== nullptr) {
         BaseAction::error("No available backup");
+        restaurant.setActionLog(this);
+    }
     restaurant =*backup;
+    restaurant.setActionLog(this);
 }
 
 std::string RestoreResturant::toString() const {
