@@ -111,8 +111,8 @@ std::vector<Customer*>& Table::getCustomers() {return customersList;}
 std::vector<OrderPair>& Table::getOrders() { return orderList;}
 
 void Table::closeTable() {
-    while(!customersList.empty())
-        customersList.pop_back();
+    for(auto i:customersList)
+        delete(i);
     open= false;
 }
 
