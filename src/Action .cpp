@@ -293,6 +293,11 @@ std::string PrintActionsLog::toString() const {
 BackupRestaurant::BackupRestaurant():BaseAction(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
+    if (backup != nullptr) {
+        delete backup;
+        backup = nullptr;
+    }
+
     backup = new Restaurant(restaurant); //// ?????
     restaurant.setActionLog(this);
     complete();
@@ -308,12 +313,14 @@ RestoreResturant::RestoreResturant():BaseAction(){}
 
 void RestoreResturant::act(Restaurant &restaurant) {
     if(backup== nullptr) {
-        BaseAction::error("No available backup");
+        BaseAction::error("No backup available");
         restaurant.setActionLog(this);
     }
-    restaurant =*backup;
-    restaurant.setActionLog(this);
-    complete();
+    else {
+        restaurant = *backup;
+        restaurant.setActionLog(this);
+        complete();
+    }
 }
 
 std::string RestoreResturant::toString() const {
