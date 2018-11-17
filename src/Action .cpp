@@ -276,6 +276,7 @@ std::string PrintTableStatus::toString() const {
 PrintActionsLog::PrintActionsLog() {}
 void PrintActionsLog::act(Restaurant &restaurant) {
     string status;
+
     for(int i=0;i<restaurant.getActionsLog().size();i++) {
         cout << restaurant.getActionsLog().at(i)->toString();
     }

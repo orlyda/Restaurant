@@ -8,7 +8,7 @@
 using namespace std;
 
 //constructor
-Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id),alreadyOrder(false){}
+Customer::Customer(std::string c_name, int c_id):name(std::move(c_name)),id(c_id),alreadyOrder(false){}
 
 //copy constructor
 Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {}
@@ -23,10 +23,6 @@ void Customer::setOrder() {alreadyOrder=true;}
 
 const string Customer::getmyType() { return myType;} ///***
 
-//std::vector<int> Customer::getAllMyOrders() { return allMyOrders;} //***
-
-//void Customer::setAllMyOrders(int newone) {allMyOrders.push_back(newone);}///***
-
 CheapCustomer* CheapCustomer::clone() { return new CheapCustomer(*this);}
 
 AlchoholicCustomer* AlchoholicCustomer::clone() { return new AlchoholicCustomer(*this);}
@@ -35,7 +31,7 @@ VegetarianCustomer* VegetarianCustomer::clone() { return new VegetarianCustomer(
 
 SpicyCustomer* SpicyCustomer::clone() { return new SpicyCustomer(*this);}
 
-CheapCustomer::CheapCustomer(std::string name, int id):Customer(name,id){ //added
+CheapCustomer::CheapCustomer(std::string name, int id):Customer(std::move(name),id){ //added
     myType="chp";
 }
 
@@ -44,17 +40,16 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
         int min = 100000000; //the price of the cheapest dish
         int minid =-1; //the id of the cheapest dish
         vector<int> v;
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<minid))  {
-                min = menu[i].getPrice();
-                minid = menu[i].getId();
+        for (const auto &i : menu) {
+            if (i.getPrice() < min |(i.getPrice() == min & i.getId()<minid))  {
+                min = i.getPrice();
+                minid = i.getId();
             }
         }
         if(min!=100000000) {
             setOrder();
-            //setAllMyOrders(minid);///***
             v.push_back(minid);
-            cout<<getName()+" ordered "+menu.at(minid).getName()<<'\n';
+            cout <<getName()+" ordered "+menu.at((unsigned long)(minid)).getName() << '\n';
             return v;
         }
     }
@@ -65,10 +60,11 @@ std::string CheapCustomer::toString() const {
     return std::to_string(this->getId())+" "+this->getName();
 }
 
-std::string SpicyCustomer::toString() const {}
+std::string SpicyCustomer::toString() const {
+    return getName()+","+"spc";
+}
 
-
-SpicyCustomer::SpicyCustomer(std::string name, int id): Customer(name,id){//added
+SpicyCustomer::SpicyCustomer(std::string name, int id): Customer(std::move(name),id){//added
     myType="spc";
 }
 
@@ -78,29 +74,29 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
     int id=-1;//the id of the chosen dish
     vector<int> v;
     if(!alreadyOrdered()) {
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu[i].getType()==SPC & (menu[i].getPrice() > max |(menu[i].getPrice() ==max & menu[i].getId()<id)) ) {
-                max = menu[i].getPrice();
-                id = menu[i].getId();
+        for (const auto &i : menu) {
+            if (i.getType()==SPC & (i.getPrice() > max |(i.getPrice() ==max & i.getId()<id)) ) {
+                max = i.getPrice();
+                id = i.getId();
             }
         }
         setOrder();
         if(id!=-1){
-            cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
+            cout <<getName()+" ordered "+menu.at((unsigned long)(id)).getName() << '\n';
             v.push_back(id);
             return v;
         }
         return std::vector<int>() ;
     }
     else{
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu[i].getType()==BVG &(menu[i].getPrice() < min |(menu[i].getPrice() ==min &menu[i].getId()<id)) ) {
-                min = menu[i].getPrice();
-                id = menu[i].getId();
+        for (const auto &i : menu) {
+            if (i.getType()==BVG &(i.getPrice() < min |(i.getPrice() ==min & i.getId()<id)) ) {
+                min = i.getPrice();
+                id = i.getId();
             }
         }
         if(id!=-1){
-            cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
+            cout <<getName()+" ordered "+menu.at((unsigned long)(id)).getName() << '\n';
             v.push_back(id);
             return v;
         }
@@ -108,7 +104,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
     }
 }
 
-VegetarianCustomer::VegetarianCustomer(std::string name, int id):Customer(name,id) { //added
+VegetarianCustomer::VegetarianCustomer(std::string name, int id):Customer(std::move(name),id) { //added
     myType="veg";
 }
 
@@ -117,23 +113,21 @@ std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
         int minid =100000000; //the id of the veg dish with the smallest id
         int maxid=-1; //the id of the most expensive BVG
         std::vector<int> v;
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu[i].getId()<minid & menu[i].getType() == VEG) {
-                minid = menu[i].getId();
+        for (const auto &i : menu) {
+            if (i.getId()<minid & i.getType() == VEG) {
+                minid = i.getId();
             }
-            if(menu[i].getType()==BVG &(menu[i].getPrice()>max||(menu[i].getPrice()==max&menu[i].getId()<maxid))) {
-                maxid=menu[i].getId();
-                max=menu[i].getPrice();
+            if(i.getType()==BVG &(i.getPrice()>max||(i.getPrice()==max& i.getId()<maxid))) {
+                maxid= i.getId();
+                max= i.getPrice();
             }
         }
         if(minid!=100000000) {
-           // setAllMyOrders(minid);///***
             v.push_back(minid);
-            cout<<getName()+" ordered "+menu.at(minid).getName()<<'\n';
+            cout <<getName()+" ordered "+menu.at((unsigned long)(minid)).getName() << '\n';
         }
         if(maxid>-1)
-           // setAllMyOrders(maxid);///***
-            cout<<getName()+" ordered "+menu.at(maxid).getName()<<'\n';
+            cout<<getName()+" ordered "+menu.at((unsigned long)maxid).getName()<<'\n';
             v.push_back(maxid);
         return v ;
 }
@@ -142,7 +136,7 @@ std::string VegetarianCustomer::toString() const {
     return std::to_string(this->getId())+" "+this->getName();
 }
 
-AlchoholicCustomer::AlchoholicCustomer(std::string name, int id) :Customer(name,id),alcPrice(-1),alcId(-1){
+AlchoholicCustomer::AlchoholicCustomer(std::string name, int id) :Customer(std::move(name),id),alcPrice(-1),alcId(-1){
     myType="alc";
 }
 
@@ -150,18 +144,17 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
     int id=-1;
     int min=10000000;
     vector<int > v;
-    for (int i=0;i<menu.size();i++){
-        if (menu[i].getType() == ALC & (menu[i].getPrice()>alcPrice | (menu[i].getPrice()==alcPrice&menu[i].getId()>alcId))
-        &(menu[i].getPrice() < min |(menu[i].getPrice() == min & menu[i].getId()<id)))  {
-            id=menu[i].getId();
-            min=menu[i].getPrice();
+    for (const auto &i : menu) {
+        if (i.getType() == ALC & (i.getPrice()>alcPrice | (i.getPrice()==alcPrice& i.getId()>alcId))
+        &(i.getPrice() < min |(i.getPrice() == min & i.getId()<id)))  {
+            id= i.getId();
+            min= i.getPrice();
         }
     }
     if(id!=-1){
         alcId=id;
         alcPrice=min;
-        //setAllMyOrders(id);///***
-        cout<<getName()+" ordered "+menu.at(id).getName()<<'\n';
+        cout<<getName()+" ordered "+menu.at((unsigned long)id).getName()<<'\n';
         v.push_back(id);
         return v;
     }

@@ -22,11 +22,8 @@ public:
     bool alreadyOrdered();
     void setOrder();
     const string getmyType();///***********
-   // void setAllMyOrders(int newone);//****
- //   std::vector<int> getAllMyOrders();//*****
 protected:
     string myType;////*****
-   // vector<int> allMyOrders;///***
 private:
     const std::string name;
     const int id;
