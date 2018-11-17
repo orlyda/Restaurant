@@ -12,8 +12,8 @@ Table::Table(int t_capacity):
 
 //copy constructor
 Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open) {
-    for(int i=0;i<t.orderList.size();i++){
-        orderList.emplace_back(t.orderList[i].first,t.orderList[i].second);
+    for (const auto &i : t.orderList) {
+        orderList.emplace_back(i.first, i.second);
     }
     for(auto i:t.customersList) {
         customersList.push_back(i->clone());
@@ -27,8 +27,8 @@ Table& Table::operator=(const Table& t) {
         open = t.open;
         orderList.clear();
         orderList.reserve(t.orderList.size());
-        for(int i=0;i<t.orderList.size();i++){
-            orderList.emplace_back(t.orderList[i].first,t.orderList[i].second);
+        for (const auto &i : t.orderList) {
+            orderList.emplace_back(i.first, i.second);
         }
         customersList.clear();
         for (auto i:t.customersList) {
@@ -40,8 +40,8 @@ Table& Table::operator=(const Table& t) {
 
 //destructor
 Table::~Table() {
-    for (int i=0;i<customersList.size();i++){
-        delete(customersList[i]);
+    for (auto &i : customersList) {
+        delete i;
     }
 }
 
@@ -51,12 +51,11 @@ Table::Table(Table &&other) noexcept:open(other.open),capacity(other.capacity),c
     other.capacity=0;
     other.customersList.clear();
     orderList.reserve(other.orderList.size());
-    for(int i=0;i<other.orderList.size();i++){
-        orderList.emplace_back(other.orderList[i].first,other.orderList[i].second);
+    for (auto &i : other.orderList) {
+        orderList.emplace_back(i.first, i.second);
     }
     other.orderList.clear();
 }
-
 
 //move assignment operator
 Table& Table::operator=(Table &&other) noexcept {
@@ -68,8 +67,8 @@ Table& Table::operator=(Table &&other) noexcept {
         customersList.reserve(other.customersList.size());
         customersList=other.customersList;
         orderList.reserve(other.orderList.size());
-        for(int i=0;i<other.orderList.size();i++){
-            orderList.emplace_back(other.orderList[i].first,other.orderList[i].second);
+        for (auto &i : other.orderList) {
+            orderList.emplace_back(i.first, i.second);
         }
     }
     return *this;
@@ -123,8 +122,8 @@ void Table::openTable() {
 
 int Table::getBill() {
     int bill=0;
-    for(int i=0;i<orderList.size();i++)
-        bill+=orderList[i].second.getPrice();
+    for (auto &i : orderList)
+        bill+= i.second.getPrice();
     return bill;
 }
 
@@ -135,15 +134,14 @@ void Table::order(const std::vector<Dish> &menu) {
     //int j=0;
     std::vector<int> dish;
 
-    for(int i=0;i<customersList.size();i++)
-    {
-        dish=customersList[i]->order(menu);
-        for(int j=0; j<dish.size(); j++) {
-            std::pair<int, Dish> p(customersList[i]->getId(), menu[dish.at(j)]);
+    for (auto &i : customersList) {
+        dish= i->order(menu);
+        for (int j : dish) {
+            std::pair<int, Dish> p(i->getId(), menu[j]);
             orderList.push_back(p);
         }
        /*if(!dish.empty()) {
-            /*while(j<menu.size()&dish[0]!=menu[j].getId())
+            while(j<menu.size()&dish[0]!=menu[j].getId())
                 j++;
         }
          if(dish.size()==2){

@@ -25,8 +25,8 @@ Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(rest
 //move construstor
 Restaurant::Restaurant(Restaurant &&other):costId(other.costId),open(other.open),
 actionsLog(other.actionsLog),tables(other.tables){
-    for (int i=0;i<other.menu.size();i++){
-        menu.push_back(other.menu[i]);
+    for (const auto &i : other.menu) {
+        menu.push_back(i);
     }
     other.menu.clear();
     other.tables.clear();
@@ -47,8 +47,8 @@ Restaurant& Restaurant::operator=(Restaurant  &&other) {
         open=other.open;
         actionsLog=other.actionsLog;
         tables=other.tables;
-        for (int i=0;i<other.menu.size();i++){
-            menu.push_back(other.menu[i]);
+        for (const auto &i : other.menu) {
+            menu.push_back(i);
         }
 
     }
@@ -100,13 +100,13 @@ Restaurant::Restaurant(const std::string &configFilePath) {
     open=false;
     ifstream myfile(configFilePath);
     string line;
-    int numberOfTabels;
+    int numberOfTabels(0);
     std::vector<string>tablesdescription;
     std::vector<string>menudescription;
     int idmenu=0;
     string name;
     int price;
-    int whichLine=0;
+ //   int whichLine=0;
     if (myfile.is_open()){
         while (getline(myfile,line)){
             if(line.empty()||line=="\r") continue;
@@ -124,7 +124,7 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                     line=line.substr(0,line.size()-1);
                 tablesdescription = split(line, ',');
                     for (int i = 0; i < numberOfTabels; i++) {
-                        Table *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
+                        auto *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
                         tables.push_back(table);
                     }
                 getline(myfile,line);
@@ -189,7 +189,7 @@ void Restaurant::start() {
             vector<Customer *> customerlist;
 
             for (int i = 2; i < theallinput.size(); i++) {
-                vector<string> customerandtype = split(theallinput.at(i), ',');
+                vector<string> customerandtype = split(theallinput.at((unsigned long)i), ',');
                 if (customerandtype.at(1) == "veg") {
                     VegetarianCustomer *vegetarianCustomerustomer=new VegetarianCustomer(customerandtype.at(0), getCostumerId());
                     setCostumerId();
@@ -208,51 +208,51 @@ void Restaurant::start() {
                     customerlist.push_back(cheapCustomer);
                 }
             }
-            OpenTable *openTable=new OpenTable(id,customerlist);
+            auto *openTable=new OpenTable(id,customerlist);
             openTable->act(*this);
         }
         else if (theallinput.at(0) == "order") { //order
             int id = stoi(theallinput.at(1));
-            Order *order=new Order(id);
+            auto *order=new Order(id);
             order->act(*this);
         }
         else if (theallinput.at(0) == "move") {//move customer
             int src=stoi(theallinput.at(1));
             int dts=stoi(theallinput.at(2));
             int id=stoi(theallinput.at(3));
-            MoveCustomer *moveCustomer=new MoveCustomer(src,dts,id);
+            auto *moveCustomer=new MoveCustomer(src,dts,id);
             moveCustomer->act(*this);
         }
         else if (theallinput.at(0) == "close") {//close
             int id=stoi(theallinput.at(1));
-            Close *close=new Close(id);
+            auto *close=new Close(id);
             close->act(*this);
         }
         else if (theallinput.at(0) == "menu") { //print menu
-            PrintMenu *printMenu=new PrintMenu();
+            auto *printMenu=new PrintMenu();
             printMenu->act(*this);
         }
         else if (theallinput.at(0) == "status") { //print table status
             int id=stoi(theallinput.at(1));
-            PrintTableStatus *printTableStatus=new PrintTableStatus(id);
+            auto *printTableStatus=new PrintTableStatus(id);
             printTableStatus->act(*this);
         }
         else if (theallinput.at(0) == "log") { //print actions log
-            PrintActionsLog *printActionsLog=new PrintActionsLog();
+            auto *printActionsLog=new PrintActionsLog();
             printActionsLog->act(*this);
         }
         else if (theallinput.at(0) == "backup") { //backup resturant
-            BackupRestaurant *backupRestaurant=new  BackupRestaurant();
+            auto *backupRestaurant=new  BackupRestaurant();
             backupRestaurant->act(*this);
         }
         else if (theallinput.at(0) == "restore") {//restore resturant
-            RestoreResturant *restoreResturant=new  RestoreResturant();
+            auto *restoreResturant=new  RestoreResturant();
             restoreResturant->act(*this);
         }
         getline(cin,input);
     }
     if (input == "closeall") {//closeall
-        CloseAll *closeAll=new CloseAll();
+        auto *closeAll=new CloseAll();
         closeAll->act(*this);
     }
 }
@@ -265,7 +265,7 @@ Table* Restaurant::getTable(int ind) {
         return nullptr;
     }
     else {
-        return tables.at(ind);
+        return tables.at((unsigned long)(ind));
     }
 }
 
