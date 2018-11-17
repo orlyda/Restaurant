@@ -188,7 +188,7 @@ std::string Close::toString() const {
 //end Close
 
 //Close all
-CloseAll::CloseAll() {}
+CloseAll::CloseAll(): BaseAction() {}
 void CloseAll::act(Restaurant &restaurant) {
     string output;
     for(int i=0;i<restaurant.getNumOfTables();i++){
@@ -210,7 +210,7 @@ std::string CloseAll::toString() const {
 //end Close all
 
 //Print menu
-PrintMenu::PrintMenu() {}
+PrintMenu::PrintMenu():BaseAction() {}
 void PrintMenu::act(Restaurant &restaurant) {
     string output;
     std::vector<Dish> menu(restaurant.getMenu());
@@ -274,7 +274,7 @@ std::string PrintTableStatus::toString() const {
 //end Table status
 
 //Print Action log
-PrintActionsLog::PrintActionsLog() {}
+PrintActionsLog::PrintActionsLog():BaseAction() {}
 void PrintActionsLog::act(Restaurant &restaurant) {
     string status;
 
@@ -291,7 +291,7 @@ std::string PrintActionsLog::toString() const {
 //end Action log
 
 //Backup Resturant
-BackupRestaurant::BackupRestaurant(){}
+BackupRestaurant::BackupRestaurant():BaseAction(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
     backup = new Restaurant(restaurant); //// ?????
@@ -305,7 +305,7 @@ std::string BackupRestaurant::toString() const {
 // end Backup Resturant
 
 //Restore Resturant
-RestoreResturant::RestoreResturant(){}
+RestoreResturant::RestoreResturant():BaseAction(){}
 
 void RestoreResturant::act(Restaurant &restaurant) {
     if(backup== nullptr) {
@@ -314,6 +314,7 @@ void RestoreResturant::act(Restaurant &restaurant) {
     }
     restaurant =*backup;
     restaurant.setActionLog(this);
+    complete();
 }
 
 std::string RestoreResturant::toString() const {
