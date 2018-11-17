@@ -22,7 +22,7 @@ std::string BaseAction::printstatus() const {
         return "Completed";
     }
     if(status==ERROR){
-        return getErrorMsg();
+        return "Error: "+getErrorMsg();
     }
 }
 

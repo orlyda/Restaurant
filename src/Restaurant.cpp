@@ -35,7 +35,7 @@ actionsLog(other.actionsLog),tables(other.tables){
     other.open=false;
 }
 //move assignment operator
-Restaurant& Restaurant::operator=(Restaurant &&other) {
+Restaurant& Restaurant::operator=(Restaurant  &&other) {
     if(this!=&other){
         menu.clear();
         tables.clear();
@@ -64,7 +64,9 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
         for(auto i:other.actionsLog){
             actionsLog.push_back(i->clone());
         }
-        tables.clear();
+        for (auto a:tables){
+            delete(a);
+        }
         for(auto j:other.tables){
             tables.push_back(j->clone());
         }
@@ -113,8 +115,8 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                 if(line.substr(line.size()-1)=="\r")
                     numberOfTabels=std::stoi(line.substr(0,line.size()-1));
                 else numberOfTabels=std::stoi(line);
+                getline(myfile,line);
             }
-            getline(myfile,line);
             if(line=="#tables description"|line=="#tables description\r"){
                 getline(myfile,line);
                 if(line.empty()||line=="\r") continue;
@@ -125,8 +127,9 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                         Table *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
                         tables.push_back(table);
                     }
+                getline(myfile,line);
+
             }
-            getline(myfile,line);
             if(line=="#Menu"|line=="#Menu\r") {
                 while (getline(myfile,line)) {
                     if(line.empty()||line=="\r") continue;
