@@ -65,7 +65,7 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
             actionsLog.push_back(i->clone());
         }
         for (auto a:tables){
-            delete(a);
+            a->closeTable();
         }
         for(auto j:other.tables){
             tables.push_back(j->clone());

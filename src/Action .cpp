@@ -244,8 +244,9 @@ PrintTableStatus::PrintTableStatus(int id):tableId(id) {
 }
 
 void PrintTableStatus::act(Restaurant &restaurant) {
-    Table thetable =*(restaurant.getTable(tableId));////?>>
+    ///?>>
     if(restaurant.getTable(tableId)->isOpen()){
+        Table thetable =*(restaurant.getTable(tableId));
         cout<<"Table "+to_string(tableId)+" status: open\n";
         cout<<"Customers:\n";
         for(int i=0;i<thetable.getCustomers().size();i++){
