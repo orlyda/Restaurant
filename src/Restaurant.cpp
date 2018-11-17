@@ -72,13 +72,14 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
 
 //destructor
 Restaurant::~Restaurant() {
-   /* for(auto i:actionsLog)
-        delete(i);*/
+    for(auto i:actionsLog)
+        delete(i);
    actionsLog.clear();
     for(auto j:tables) {
         delete j;
+        j= nullptr;
     }
-    menu.clear();
+//    menu.clear();
 }
 
 void Restaurant::closeResturant() {open= false;}
@@ -118,7 +119,7 @@ Restaurant::Restaurant(const std::string &configFilePath) {
                     line=line.substr(0,line.size()-1);
                 tablesdescription = split(line, ',');
                     for (int i = 0; i < numberOfTabels; i++) {
-                        auto *table = new Table(std::stoi(tablesdescription.at((unsigned long) i)));
+                        auto *table = new Table(std::stoi(tablesdescription.at(i)));
                         tables.push_back(table);
                     }
                 getline(myfile,line);
@@ -249,7 +250,7 @@ void Restaurant::start() {
     if (input == "closeall") {//closeall
         auto *closeAll=new CloseAll();
         closeAll->act(*this);
-        delete(this);
+//        delete(this);
     }
 }
 

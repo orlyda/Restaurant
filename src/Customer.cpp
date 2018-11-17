@@ -35,6 +35,8 @@ CheapCustomer::CheapCustomer(std::string name, int id):Customer(std::move(name),
     myType="chp";
 }
 
+Customer::~Customer() = default;
+
 std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
     if(!alreadyOrdered()) {
         int min = 100000000; //the price of the cheapest dish

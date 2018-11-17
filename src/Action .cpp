@@ -10,6 +10,8 @@
 using namespace std;
 extern Restaurant* backup;
 
+BaseAction::~BaseAction() = default;
+
 BaseAction::BaseAction(): status(PENDING),errorMsg(""){}
 
 ActionStatus BaseAction::getStatus() const { return  status;}

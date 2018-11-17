@@ -85,10 +85,6 @@ void Table::addCustomer(Customer* customer) {
 
 int Table::getCapacity() const { return capacity;}
 
-//void Table::setorderspush(OrderPair orderPair) {orderList.push_back(orderPair);}///****
-
-//void Table::setorderserase(int i) {orderList.erase(orderList.begin()+i);} ///*****
-
 Customer* Table::getCustomer(int id) {
     int i=0;
     while(i<customersList.size() & customersList[i]->getId()!=id )
@@ -112,9 +108,10 @@ std::vector<Customer*>& Table::getCustomers() {return customersList;}
 std::vector<OrderPair>& Table::getOrders() { return orderList;}
 
 void Table::closeTable() {
-   // for(auto i:customersList)
-     //   delete(i);
-     customersList.clear();
+    for(auto i:customersList)
+        delete(i);
+    customersList.clear();
+    orderList.clear();
     open= false;
 }
 
@@ -133,25 +130,13 @@ bool Table::isOpen() {return open;}
 
 
 void Table::order(const std::vector<Dish> &menu) {
-    //int j=0;
     std::vector<int> dish;
-
     for (auto &i : customersList) {
         dish= i->order(menu);
         for (int j : dish) {
             std::pair<int, Dish> p(i->getId(), menu[j]);
             orderList.push_back(p);
         }
-       /*if(!dish.empty()) {
-            while(j<menu.size()&dish[0]!=menu[j].getId())
-                j++;
-        }
-         if(dish.size()==2){
-            while(j<menu.size()&dish[1]!=menu[j].getId())
-                j++;
-            std::pair<int,Dish > p(customersList[i]->getId(),menu[j]);
-            orderList.push_back(p);
-        }*/
     }
 }
 

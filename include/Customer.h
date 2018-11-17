@@ -15,6 +15,7 @@ public:
     Customer(std::string c_name, int c_id);//constructor
     Customer(Customer &c);//copy constructor
     virtual Customer* clone()=0;
+    virtual ~Customer();
     virtual std::vector<int> order(const std::vector<Dish> &menu)=0;
     virtual std::string toString() const = 0;
     std::string getName() const;
