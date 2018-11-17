@@ -67,7 +67,7 @@ OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id)
 
 void OpenTable::act(Restaurant &restaurant) {
     if(restaurant.getTable(tableId)== nullptr||restaurant.getTable(tableId)->isOpen()) {
-        error("Table does not exist or is already open\n");
+        error("Table does not exist or is already open");
         restaurant.setActionLog(this);
     }
     else{
@@ -97,7 +97,7 @@ Order::Order(int id):tableId(id){}
 void Order::act(Restaurant &restaurant) {
    // string output;
     if(!restaurant.getTable(tableId)->isOpen() || restaurant.getTable(tableId)== nullptr) {
-        error("Table does not exist or is already open\n");
+        error("Table does not exist or is already open");
         restaurant.setActionLog(this);
     }
     else{
@@ -128,41 +128,40 @@ std::string Order::toString() const {
 MoveCustomer::MoveCustomer(int src, int dst, int customerId):dstTable(dst),srcTable(src),id(customerId){}
 
 void MoveCustomer::act(Restaurant &restaurant) {
-    Table source =*(restaurant.getTable(srcTable));////
-    Table destintion =*(restaurant.getTable(dstTable));////
-    if(!source.isOpen() | !destintion.isOpen() |
-            source.getCustomer(id)== nullptr |
-            source.getCustomers().size()+1>destintion.getCapacity()){
-        error("cannot move customer\n");
+    Table & source =*(restaurant.getTable(srcTable));
+    Table & destintion =*(restaurant.getTable(dstTable));
+    if(source.getCustomer(id)== nullptr|| !source.isOpen() | !destintion.isOpen() |
+            destintion.getCustomers().size()+1>destintion.getCapacity()){
+        error("cannot move customer");
         restaurant.setActionLog(this);
     }
     else {
         vector<OrderPair> temp;
+
         for(int i=0;i<source.getOrders().size();i++){
-            temp.push_back(source.getOrders().at(i));
+            temp.push_back(source.getOrders().at((unsigned long)i));
         }
         source.getOrders().clear();
 
         for(int i=0;i<temp.size();i++){
-            if(temp.at(i).first == source.getCustomer(id)->getId()){
-                destintion.getOrders().push_back(temp.at(i));
+            if(temp.at((unsigned long)i).first == source.getCustomer(id)->getId()){
+                destintion.getOrders().push_back(temp.at((unsigned long)i));
             }
             else {
-                source.getOrders().push_back(temp.at(i));
+                source.getOrders().push_back(temp.at((unsigned long)i));
             }
         }
         temp.clear();
+
         destintion.addCustomer(source.getCustomer(id));
         source.removeCustomer(id);
 
         if(source.getCustomers().empty()){
-            destintion.closeTable();
+            source.closeTable();
         }
         restaurant.setActionLog(this);
         complete();
     }
-    //delete(&source);//??
-    //delete(&destintion);//??
 }
 
 std::string MoveCustomer::toString() const {
@@ -176,7 +175,7 @@ Close::Close(int id):tableId(id){}
 void Close::act(Restaurant &restaurant) {
     Table thetable =*(restaurant.getTable(tableId));////?>>
     if(!thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
-        error("Table does not exist or is already open\n");
+        error("Table does not exist or is already open");
         restaurant.setActionLog(this);
     }
     else{
@@ -185,7 +184,6 @@ void Close::act(Restaurant &restaurant) {
         restaurant.setActionLog(this);
         complete();
     }
-   // delete(&thetable);//??
 }
 
 std::string Close::toString() const {
@@ -264,14 +262,13 @@ void PrintTableStatus::act(Restaurant &restaurant) {
            std::to_string(thetable.getOrders()[i].second.getPrice())+"NIS "+
            std::to_string(thetable.getOrders()[i].first)+"\n";
         }
-        cout<<"Current Bill:"+to_string(thetable.getBill())+"\n";
+        cout<<"Current Bill:"+to_string(thetable.getBill())+"NIS"+"\n";
     }
     else{
         cout<<"Table "+to_string(tableId)+" status: closed\n";
     }
     restaurant.setActionLog(this);
     complete();
-    //delete(&thetable);//??
 }
 
 std::string PrintTableStatus::toString() const {
