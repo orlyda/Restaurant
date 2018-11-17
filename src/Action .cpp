@@ -180,7 +180,7 @@ void Close::act(Restaurant &restaurant) {
         complete();
     }
 }
-
+//
 std::string Close::toString() const {
     return "close "+to_string(tableId)+" "+printstatus()+"\n";
 }
