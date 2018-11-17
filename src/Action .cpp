@@ -169,15 +169,14 @@ std::string MoveCustomer::toString() const {
 Close::Close(int id):tableId(id){}
 
 void Close::act(Restaurant &restaurant) {
-    Table &thetable =*(restaurant.getTable(tableId));////?>>
-    if(!thetable.isOpen() | restaurant.getTable(tableId)== nullptr) { //??null
+    if(restaurant.getTable(tableId)== nullptr || !restaurant.getTable(tableId)->isOpen()) { //??null
         error("Table does not exist or is not open");
         restaurant.setActionLog(this);
     }
     else{
-        cout<< "Table "+to_string(tableId)+" was closed. Bill "+to_string(thetable.getBill())+"NIS\n";
+        cout<< "Table "+to_string(tableId)+" was closed. Bill "+to_string(restaurant.getTable(tableId)->getBill())+"NIS\n";
         restaurant.setActionLog(this);
-        thetable.closeTable();
+        restaurant.getTable(tableId)->closeTable();
         complete();
     }
 }
