@@ -84,8 +84,9 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
                 id = i.getId();
             }
         }
-        setOrder();
+        //setOrder();
         if(id!=-1){
+            setOrder();
             cout <<getName()+" ordered "+menu.at((unsigned long)(id)).getName() << '\n';
             v.push_back(id);
             return v;
