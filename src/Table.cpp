@@ -7,11 +7,11 @@
 //constructor
 Table::Table(int t_capacity):
         capacity(t_capacity),
-        open(false)
+        open(false), customersList(),orderList()
 {}
 
 //copy constructor
-Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open) {
+Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open),orderList(),customersList(){
     for (const auto &i : t.orderList) {
         orderList.emplace_back(i.first, i.second);
     }
@@ -30,7 +30,8 @@ Table& Table::operator=(const Table& t) {
         for (const auto &i : t.orderList) {
             orderList.emplace_back(i.first, i.second);
         }
-        customersList.clear();
+        for (auto j:customersList)
+            delete j;
         for (auto i:t.customersList) {
             customersList.push_back(i->clone());
         }
@@ -51,7 +52,8 @@ Table::~Table() {
 Table::Table(Table &&other) noexcept:open(other.open),capacity(other.capacity),customersList(other.customersList){
     other.open= false;
     other.capacity=0;
-    other.customersList.clear();
+    for(auto j:other.customersList)
+        delete(j);
     orderList.reserve(other.orderList.size());
     for (auto &i : other.orderList) {
         orderList.emplace_back(i.first, i.second);
@@ -62,7 +64,8 @@ Table::Table(Table &&other) noexcept:open(other.open),capacity(other.capacity),c
 //move assignment operator
 Table& Table::operator=(Table &&other) noexcept {
     if(this!=&other){
-        customersList.clear();
+        for(auto j:customersList)
+            delete(j);
         orderList.clear();
         open=other.open;
         capacity=other.capacity;
