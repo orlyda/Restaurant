@@ -10,11 +10,11 @@
 
 using namespace std;
 //constructor
-Restaurant::Restaurant():open(false),costId(0){}
+Restaurant::Restaurant():costId(0),open(false), tables(),menu(),actionsLog(){}
 
 //copy constructor
-Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(restaurant.costId)
-,menu(restaurant.menu) {
+Restaurant::Restaurant(Restaurant &restaurant):costId(restaurant.costId),open(restaurant.open),
+tables(), menu(restaurant.menu), actionsLog() {
     for(auto i:restaurant.actionsLog){
         actionsLog.push_back(i->clone());
     }
@@ -24,7 +24,7 @@ Restaurant::Restaurant(Restaurant &restaurant):open(restaurant.open),costId(rest
 }
 //move construstor
 Restaurant::Restaurant(Restaurant &&other):costId(other.costId),open(other.open),
-actionsLog(other.actionsLog),tables(other.tables){
+tables(other.tables),menu(),actionsLog(other.actionsLog){
     for (const auto &i : other.menu) {
         menu.push_back(i);
     }
@@ -64,7 +64,7 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
         for(auto i:other.actionsLog){
             actionsLog.push_back(i->clone());
         }
-        for(int j=0;j<tables.size();j++){
+        for(unsigned int j=0;j<tables.size();j++){
             tables[j]=other.tables[j];
         }
     }
@@ -73,9 +73,11 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
 
 //destructor
 Restaurant::~Restaurant() {
-    for(auto i:actionsLog)
-        delete(i);
-   actionsLog.clear();
+    for(auto i:actionsLog) {
+        delete (i);
+        i= nullptr;
+    }
+//   actionsLog.clear();
     for(auto j:tables) {
         delete j;
         j= nullptr;
@@ -91,9 +93,8 @@ void Restaurant::setActionLog(BaseAction* action) { ///added
 
 const std::vector<BaseAction*>& Restaurant::getActionsLog() const { return actionsLog;}
 
-Restaurant::Restaurant(const std::string &configFilePath) {
-    costId=0;
-    open=false;
+Restaurant::Restaurant(const std::string &configFilePath):
+costId(0),open(false), tables(),menu(),actionsLog() {
     ifstream myfile(configFilePath);
     string line;
     int numberOfTabels(0);
@@ -106,27 +107,26 @@ Restaurant::Restaurant(const std::string &configFilePath) {
     if (myfile.is_open()){
         while (getline(myfile,line)){
             if(line.empty()||line=="\r") continue;
-            if(line=="#number of tables"|line=="#number of tables\r"){
+            if(line=="#number of tables"||line=="#number of tables\r"){
                 getline(myfile,line);
                 if(line.substr(line.size()-1)=="\r")
                     numberOfTabels=std::stoi(line.substr(0,line.size()-1));
                 else numberOfTabels=std::stoi(line);
                 getline(myfile,line);
             }
-            if(line=="#tables description"|line=="#tables description\r"){
+            if(line=="#tables description"||line=="#tables description\r"){
                 getline(myfile,line);
                 if(line.empty()||line=="\r") continue;
                 if(line.substr(line.size()-1)=="\r")
                     line=line.substr(0,line.size()-1);
                 tablesdescription = split(line, ',');
                     for (int i = 0; i < numberOfTabels; i++) {
-                        auto *table = new Table(std::stoi(tablesdescription.at(i)));
-                        tables.push_back(table);
+                        tables.push_back(new Table(std::stoi(tablesdescription.at(i))));
                     }
                 getline(myfile,line);
 
             }
-            if(line=="#Menu"|line=="#Menu\r") {
+            if(line=="#Menu"||line=="#Menu\r") {
                 while (getline(myfile,line)) {
                     if(line.empty()||line=="\r") continue;
                     if(line.substr(line.size()-1)=="\r")
@@ -184,7 +184,7 @@ void Restaurant::start() {
             int id = stoi(theallinput.at(1));
             vector<Customer *> customerlist;
 
-            for (int i = 2; i < theallinput.size(); i++) {
+            for (unsigned int i = 2; i < theallinput.size(); i++) {
                 vector<string> customerandtype = split(theallinput.at((unsigned long)i), ',');
                 if (customerandtype.at(1) == "veg") {
                     VegetarianCustomer *vegetarianCustomerustomer=new VegetarianCustomer(customerandtype.at(0), getCostumerId());
@@ -204,19 +204,19 @@ void Restaurant::start() {
                     customerlist.push_back(cheapCustomer);
                 }
             }
-            auto *openTable=new OpenTable(id,customerlist);
+            auto openTable=new OpenTable(id,customerlist);
             openTable->act(*this);
         }
         else if (theallinput.at(0) == "order") { //order
             int id = stoi(theallinput.at(1));
-            auto *order=new Order(id);
+            auto order=new Order(id);
             order->act(*this);
         }
         else if (theallinput.at(0) == "move") {//move customer
             int src=stoi(theallinput.at(1));
             int dts=stoi(theallinput.at(2));
             int id=stoi(theallinput.at(3));
-            auto *moveCustomer=new MoveCustomer(src,dts,id);
+            auto moveCustomer=new MoveCustomer(src,dts,id);
             moveCustomer->act(*this);
         }
         else if (theallinput.at(0) == "close") {//close
@@ -258,7 +258,7 @@ void Restaurant::start() {
 int Restaurant::getNumOfTables() const { return (int)tables.size();}
 
 Table* Restaurant::getTable(int ind) {
-    if (ind>tables.size() | ind<0)
+    if ((unsigned)ind>tables.size() || ind<0)
     {
         return nullptr;
     }
