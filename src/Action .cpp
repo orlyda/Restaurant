@@ -302,6 +302,7 @@ void BackupRestaurant::act(Restaurant &restaurant) {
     }
     //else
     backup = new Restaurant(restaurant); //// ?????
+  // *backup=restaurant;
 
     restaurant.setActionLog(this);
     complete();

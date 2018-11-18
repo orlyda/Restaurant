@@ -60,6 +60,7 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
     if(this!=&other){
         open=other.open;
         costId=other.open;
+        this->actionsLog.clear();
         for(auto i:other.actionsLog){
             actionsLog.push_back(i->clone());
         }
@@ -176,7 +177,7 @@ void Restaurant::start() {
     string input;
     getline(cin,input);
 
-    while(input!="closeall") { /// not sure at all, need to read more about getting input in a loop
+    while(input!="closeall") {
         vector<string> theallinput=split(input,' ');
 
         if (theallinput.at(0) == "open") { //opentable
