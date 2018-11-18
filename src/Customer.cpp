@@ -11,7 +11,9 @@ using namespace std;
 Customer::Customer(std::string c_name, int c_id):name(std::move(c_name)),id(c_id),alreadyOrder(false){}
 
 //copy constructor
-Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {}
+Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {
+    myType=c.getmyType();
+}
 
 int Customer::getId() const { return id;}
 

@@ -215,21 +215,21 @@ PrintMenu::PrintMenu():BaseAction() {}
 void PrintMenu::act(Restaurant &restaurant) {
     string output;
     std::vector<Dish> menu(restaurant.getMenu());
-    for(int i=0;i<menu.size();i++){
+    for (auto &i : menu) {
         string dishType;
-        if (menu.at(i).getType()==ALC){
+        if (i.getType()==ALC){
             dishType="ALC";
         }
-        else if(menu.at(i).getType()==SPC){
+        else if(i.getType()==SPC){
             dishType="SPC";
         }
-        else if(menu.at(i).getType()==BVG){
+        else if(i.getType()==BVG){
             dishType="BVG";
         }
-        else if(menu.at(i).getType()==VEG){
+        else if(i.getType()==VEG){
             dishType="VEG";
         }
-        output+=menu.at(i).getName()+" "+dishType+" "+std::to_string(menu.at(i).getPrice())+"NIS\n";
+        output+= i.getName()+" "+dishType+" "+std::to_string(i.getPrice())+"NIS\n";
     }
     cout<< output;
     complete();
@@ -251,14 +251,14 @@ void PrintTableStatus::act(Restaurant &restaurant) {
         cout<<"Table "+to_string(tableId)+" status: open\n";
         cout<<"Customers:\n";
         for(int i=0;i<thetable.getCustomers().size();i++){
-         cout<<to_string(thetable.getCustomers().at(i)->getId())+" "+
-                 thetable.getCustomers().at(i)->getName()+"\n";
+         cout<< to_string(thetable.getCustomers().at((unsigned long)i)->getId()) + " " +
+                thetable.getCustomers().at((unsigned long)(i))->getName() + "\n";
         }
         cout<<"Orders:\n";
-        for(int i=0;i<thetable.getOrders().size();i++){
-           cout<< thetable.getOrders()[i].second.getName()+" "+
-           std::to_string(thetable.getOrders()[i].second.getPrice())+"NIS "+
-           std::to_string(thetable.getOrders()[i].first)+"\n";
+        for (auto &i : thetable.getOrders()) {
+           cout<< i.second.getName()+" "+
+           std::to_string(i.second.getPrice())+"NIS "+
+           std::to_string(i.first)+"\n";
         }
         cout<<"Current Bill:"+to_string(thetable.getBill())+"NIS"+"\n";
     }
@@ -279,8 +279,8 @@ PrintActionsLog::PrintActionsLog():BaseAction() {}
 void PrintActionsLog::act(Restaurant &restaurant) {
     string status;
 
-    for(int i=0;i<restaurant.getActionsLog().size();i++) {
-        cout << restaurant.getActionsLog().at(i)->toString();
+    for (auto i : restaurant.getActionsLog()) {
+        cout << i->toString();
     }
     restaurant.setActionLog(this);
     complete();
@@ -302,6 +302,7 @@ void BackupRestaurant::act(Restaurant &restaurant) {
     }
     //else
     backup = new Restaurant(restaurant); //// ?????
+  // *backup=restaurant;
 
     restaurant.setActionLog(this);
     complete();
