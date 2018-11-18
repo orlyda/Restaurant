@@ -11,7 +11,7 @@ Table::Table(int t_capacity):
 {}
 
 //copy constructor
-Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open),orderList(),customersList(){
+Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open),customersList(),orderList(){
     for (const auto &i : t.orderList) {
         orderList.emplace_back(i.first, i.second);
     }
@@ -45,11 +45,12 @@ Table::~Table() {
         delete i;
         i= nullptr;
     }
-    orderList.clear();
+    //orderList.clear();
 }
 
 //move constructor
-Table::Table(Table &&other) noexcept:open(other.open),capacity(other.capacity),customersList(other.customersList){
+Table::Table(Table &&other) noexcept:
+capacity(other.capacity),open(other.open),customersList(other.customersList), orderList(){
     other.open= false;
     other.capacity=0;
     for(auto j:other.customersList)
@@ -90,7 +91,7 @@ int Table::getCapacity() const { return capacity;}
 
 Customer* Table::getCustomer(int id) {
     int i=0;
-    while(i<customersList.size() & customersList[i]->getId()!=id )
+    while((unsigned)i<customersList.size() && customersList[i]->getId()!=id )
         i++;
     if(customersList[i]->getId()==id )
         return customersList[i];
@@ -100,10 +101,12 @@ Customer* Table::getCustomer(int id) {
 
 void Table::removeCustomer(int id) {
     int i=0;
-    while(i<customersList.size()& customersList[i]->getId()!=id )
+    while((unsigned)i<customersList.size()&& customersList[i]->getId()!=id )
         i++;
-    if(customersList[i]->getId()==id )
-        customersList.erase(customersList.begin()+i);
+    if(customersList[i]->getId()==id ) {
+        delete customersList[i];
+        customersList[i]= nullptr;
+    }
 }
 
 std::vector<Customer*>& Table::getCustomers() {return customersList;}
