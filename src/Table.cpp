@@ -6,16 +6,15 @@
 
 //constructor
 Table::Table(int t_capacity):
-        capacity(t_capacity),
-        open(false), customersList(),orderList()
+        capacity(t_capacity), open(false), customersList(),orderList()
 {}
 
 //copy constructor
-Table::Table(const Table &t):capacity(t.getCapacity()),open(t.open),customersList(),orderList(){
-    for (const auto &i : t.orderList) {
+Table::Table(const Table &t):capacity(t.capacity),open(t.open),customersList(),orderList(){
+    for (auto &i : t.orderList) {
         orderList.emplace_back(i.first, i.second);
     }
-    for(auto i:t.customersList) {
+    for(auto &i:t.customersList) {
         customersList.push_back(i->clone());
     }
 }
@@ -30,9 +29,14 @@ Table& Table::operator=(const Table& t) {
         for (const auto &i : t.orderList) {
             orderList.emplace_back(i.first, i.second);
         }
-        for (auto j:customersList)
-            delete j;
-        for (auto i:t.customersList) {
+        for (auto & j:customersList)
+            if(j!= nullptr) {
+                delete j;
+                j = nullptr;
+            }
+        customersList.clear();
+
+        for (auto & i:t.customersList) {
             customersList.push_back(i->clone());
         }
     }
@@ -42,22 +46,41 @@ Table& Table::operator=(const Table& t) {
 //destructor
 Table::~Table() {
     for (auto &i : customersList) {
-        delete i;
-        i= nullptr;
+        if(i!= nullptr) {
+            delete i;
+            i = nullptr;
+        }
     }
-    //orderList.clear();
+    customersList.clear();
+    orderList.clear();
 }
 
 //move constructor
 Table::Table(Table &&other) noexcept:
-capacity(other.capacity),open(other.open),customersList(other.customersList), orderList(){
+capacity(other.capacity),open(other.open),customersList(), orderList(){
     other.open= false;
     other.capacity=0;
-    for(auto j:other.customersList)
-        delete(j);
+
+    for(auto j:customersList) {
+        if(j!= nullptr) {
+            delete (j);
+            j= nullptr;
+        }
+    }
+    customersList.clear();
+    for(auto & j:other.customersList){
+        customersList.push_back(j->clone());
+    }
+    for(auto & j:other.customersList) {
+        if(j!= nullptr) {
+            delete (j);
+            j= nullptr;
+        }
+    }
+
     orderList.reserve(other.orderList.size());
     for (auto &i : other.orderList) {
-        orderList.emplace_back(i.first, i.second);
+       orderList.emplace_back(i.first, i.second);
     }
     other.orderList.clear();
 }
@@ -65,16 +88,28 @@ capacity(other.capacity),open(other.open),customersList(other.customersList), or
 //move assignment operator
 Table& Table::operator=(Table &&other) noexcept {
     if(this!=&other){
-        for(auto j:customersList)
-            delete(j);
+        for(auto &j:customersList) {
+            if(j!= nullptr) {
+                delete (j);
+                j= nullptr;
+            }
+        }
+        customersList.clear();
         orderList.clear();
         open=other.open;
         capacity=other.capacity;
-        customersList.reserve(other.customersList.size());
-        customersList=other.customersList;
+        customersList.resize(other.customersList.size()); //resize instead reserve
+      //  customersList=other.customersList;
+        for(auto & c:other.customersList){
+            customersList.push_back(c->clone());
+        }
         orderList.reserve(other.orderList.size());
         for (auto &i : other.orderList) {
-            orderList.emplace_back(i.first, i.second);
+            int id = i.first;
+            Dish dish = i.second;
+            OrderPair pair(id,dish);
+            orderList.push_back(pair);
+         //   orderList.emplace_back(i.first, i.second);
         }
     }
     return *this;
@@ -84,7 +119,7 @@ Table& Table::operator=(Table &&other) noexcept {
 Table* Table::clone() { return new Table(*this);}
 
 void Table::addCustomer(Customer* customer) {
-    customersList.push_back(customer);
+    customersList.push_back(customer->clone());
 }
 
 int Table::getCapacity() const { return capacity;}
@@ -114,10 +149,10 @@ std::vector<Customer*>& Table::getCustomers() {return customersList;}
 std::vector<OrderPair>& Table::getOrders() { return orderList;}
 
 void Table::closeTable() {
-    for(auto i:customersList)
-        delete(i);
-    customersList.clear();
-    orderList.clear();
+    //for(auto i:customersList)
+     //   delete(i);
+    //customersList.clear();
+    //orderList.clear();
     open= false;
 }
 

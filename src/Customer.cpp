@@ -8,12 +8,11 @@
 using namespace std;
 
 //constructor
-Customer::Customer(std::string c_name, int c_id):myType(),name(std::move(c_name)),id(c_id),alreadyOrder(false){}
+Customer::Customer(std::string c_name, int c_id):name(std::move(c_name)),id(c_id),alreadyOrder(false){}
 
 //copy constructor
-Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {
-    myType=c.getmyType();
-}
+//Customer::Customer(Customer &c): Customer(c.getName(),c.getId()) {
+//}
 
 int Customer::getId() const { return id;}
 
@@ -23,18 +22,16 @@ bool Customer::alreadyOrdered() { return alreadyOrder;}
 
 void Customer::setOrder() {alreadyOrder=true;}
 
-const string Customer::getmyType() { return myType;} ///***
+CheapCustomer* CheapCustomer::clone() { return new CheapCustomer(getName(),getId());}
 
-CheapCustomer* CheapCustomer::clone() { return new CheapCustomer(*this);}
+AlchoholicCustomer* AlchoholicCustomer::clone() { return new AlchoholicCustomer(getName(),getId());}
 
-AlchoholicCustomer* AlchoholicCustomer::clone() { return new AlchoholicCustomer(*this);}
+VegetarianCustomer* VegetarianCustomer::clone() { return new VegetarianCustomer(getName(),getId());}
 
-VegetarianCustomer* VegetarianCustomer::clone() { return new VegetarianCustomer(*this);}
-
-SpicyCustomer* SpicyCustomer::clone() { return new SpicyCustomer(*this);}
+SpicyCustomer* SpicyCustomer::clone() { return new SpicyCustomer(getName(),getId());}
 
 CheapCustomer::CheapCustomer(std::string name, int id):Customer(std::move(name),id){ //added
-    myType="chp";
+  //  myType="chp";
 }
 
 Customer::~Customer() = default;
@@ -61,7 +58,7 @@ std::vector<int> CheapCustomer::order(const std::vector<Dish> &menu) {
 }
 
 std::string CheapCustomer::toString() const {
-    return std::to_string(this->getId())+" "+this->getName();
+    return getName() + "," + "chp";
 }
 
 std::string SpicyCustomer::toString() const {
@@ -69,7 +66,7 @@ std::string SpicyCustomer::toString() const {
 }
 
 SpicyCustomer::SpicyCustomer(std::string name, int id): Customer(std::move(name),id){//added
-    myType="spc";
+   // myType="spc";
 }
 
 std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
@@ -110,7 +107,7 @@ std::vector<int> SpicyCustomer::order(const std::vector<Dish> &menu) {
 }
 
 VegetarianCustomer::VegetarianCustomer(std::string name, int id):Customer(std::move(name),id) { //added
-    myType="veg";
+    //myType="veg";
 }
 
 std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
@@ -141,11 +138,10 @@ std::vector<int> VegetarianCustomer::order(const std::vector<Dish> &menu) {
 }
 
 std::string VegetarianCustomer::toString() const {
-    return std::to_string(this->getId())+" "+this->getName();
+    return getName() + "," + "veg";
 }
-
 AlchoholicCustomer::AlchoholicCustomer(std::string name, int id) :Customer(std::move(name),id),alcPrice(-1),alcId(-1){
-    myType="alc";
+    //myType="alc";
 }
 
 std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
@@ -171,5 +167,5 @@ std::vector<int> AlchoholicCustomer::order(const std::vector<Dish> &menu) {
 }
 
 std::string AlchoholicCustomer::toString() const {
-    return std::to_string(this->getId())+" "+this->getName();
+    return getName() + "," + "alc";
 }

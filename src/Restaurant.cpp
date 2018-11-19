@@ -10,11 +10,11 @@
 
 using namespace std;
 //constructor
-Restaurant::Restaurant():costId(0),open(false), tables(),menu(),actionsLog(){}
+Restaurant::Restaurant():costId(0),open(false), tables(),menu(),actionsLog(),numOfTables(0){}
 
 //copy constructor
 Restaurant::Restaurant(Restaurant &restaurant):costId(restaurant.costId),open(restaurant.open),
-tables(), menu(restaurant.menu), actionsLog() {
+tables(),menu(restaurant.menu), actionsLog() {
     for(auto i:restaurant.actionsLog){
         actionsLog.push_back(i->clone());
     }
@@ -23,6 +23,7 @@ tables(), menu(restaurant.menu), actionsLog() {
     }
 }
 //move construstor
+/*
 Restaurant::Restaurant(Restaurant &&other):costId(other.costId),open(other.open),
 tables(other.tables),menu(),actionsLog(other.actionsLog){
     for (const auto &i : other.menu) {
@@ -34,6 +35,9 @@ tables(other.tables),menu(),actionsLog(other.actionsLog){
     other.costId=0;
     other.open=false;
 }
+ */
+
+/*
 //move assignment operator
 Restaurant& Restaurant::operator=(Restaurant  &&other) {
     if(this!=&other){
@@ -54,18 +58,37 @@ Restaurant& Restaurant::operator=(Restaurant  &&other) {
     }
     return *this;
 }
+ */
 
 //copy assignment operator
 Restaurant& Restaurant::operator=(const Restaurant &other) {
-    if(this!=&other){
-        open=other.open;
-        costId=other.open;
-        this->actionsLog.clear();
-        for(auto i:other.actionsLog){
+    if (this != &other) {
+        open = other.open;
+        numOfTables = other.numOfTables;
+        costId = other.open;
+
+        for(auto &a:actionsLog){
+            delete a;
+        }
+        actionsLog.clear();
+
+        for (auto &i:other.actionsLog) {
             actionsLog.push_back(i->clone());
         }
-        for(unsigned int j=0;j<tables.size();j++){
-            tables[j]=other.tables[j];
+        // for(unsigned int j=0;j<tables.size();j++){
+        //     tables[j]=other.tables[j];
+        //  }
+        for (auto &t:tables) {
+            delete t;
+        }
+        tables.clear();
+
+        for (auto &ot:other.tables) {
+            tables.push_back(ot->clone());
+        }
+        menu.clear();
+        for(auto & om:other.menu){
+            menu.push_back(om);
         }
     }
     return *this;
@@ -73,16 +96,22 @@ Restaurant& Restaurant::operator=(const Restaurant &other) {
 
 //destructor
 Restaurant::~Restaurant() {
-    for(auto i:actionsLog) {
-        delete (i);
-        i= nullptr;
+    for(auto& i:actionsLog) {
+        if(i!= nullptr) {
+            delete (i);
+            i = nullptr;
+        }
     }
-//   actionsLog.clear();
-    for(auto j:tables) {
-        delete j;
-        j= nullptr;
+    actionsLog.clear();
+
+    for(auto& j:tables) {
+        if(j!= nullptr) {
+            delete j;
+            j = nullptr;
+        }
     }
-//    menu.clear();
+    tables.clear();
+    menu.clear();
 }
 
 void Restaurant::closeResturant() {open= false;}
@@ -109,9 +138,14 @@ costId(0),open(false), tables(),menu(),actionsLog() {
             if(line.empty()||line=="\r") continue;
             if(line=="#number of tables"||line=="#number of tables\r"){
                 getline(myfile,line);
-                if(line.substr(line.size()-1)=="\r")
-                    numberOfTabels=std::stoi(line.substr(0,line.size()-1));
-                else numberOfTabels=std::stoi(line);
+                if(line.substr(line.size()-1)=="\r") {
+                    numberOfTabels = std::stoi(line.substr(0, line.size() - 1));
+                    numOfTables = numberOfTabels;
+                }
+                else{
+                    numberOfTabels=std::stoi(line);
+                    numOfTables = numberOfTabels;
+                }
                 getline(myfile,line);
             }
             if(line=="#tables description"||line=="#tables description\r"){
@@ -120,8 +154,8 @@ costId(0),open(false), tables(),menu(),actionsLog() {
                 if(line.substr(line.size()-1)=="\r")
                     line=line.substr(0,line.size()-1);
                 tablesdescription = split(line, ',');
-                    for (int i = 0; i < numberOfTabels; i++) {
-                        tables.push_back(new Table(std::stoi(tablesdescription.at(i))));
+                    for (auto i = 0; i < numberOfTabels; i++) {
+                        tables.push_back(new Table(std::stoi(tablesdescription.at((unsigned long)i))));
                     }
                 getline(myfile,line);
 
@@ -206,6 +240,10 @@ void Restaurant::start() {
             }
             auto openTable=new OpenTable(id,customerlist);
             openTable->act(*this);
+            for(auto c:customerlist) {
+                delete c;
+            }
+            customerlist.clear();
         }
         else if (theallinput.at(0) == "order") { //order
             int id = stoi(theallinput.at(1));
@@ -225,7 +263,7 @@ void Restaurant::start() {
             close->act(*this);
         }
         else if (theallinput.at(0) == "menu") { //print menu
-            auto *printMenu=new PrintMenu();
+            auto *printMenu = new PrintMenu();
             printMenu->act(*this);
         }
         else if (theallinput.at(0) == "status") { //print table status
@@ -255,7 +293,7 @@ void Restaurant::start() {
     }
 }
 
-int Restaurant::getNumOfTables() const { return (int)tables.size();}
+int Restaurant::getNumOfTables() const { return numOfTables;}
 
 Table* Restaurant::getTable(int ind) {
     if ((unsigned)ind>tables.size() || ind<0)

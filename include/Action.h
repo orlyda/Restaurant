@@ -42,9 +42,10 @@ public:
     void act(Restaurant &restaurant);
     std::string toString() const;
     OpenTable* clone();
+    ~OpenTable();//destructor
 private:
     const int tableId;
-    const std::vector<Customer *> customers;
+    std::vector<Customer *> customers;
 };
 
 class Order : public BaseAction {

@@ -60,8 +60,22 @@ RestoreResturant* RestoreResturant::clone() { return new RestoreResturant(*this)
 
 
 //OpenTable
-OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id), customers(customersList){
+OpenTable::OpenTable(int id, std::vector<Customer *> &customersList):tableId(id), customers(){
+    for(auto c:customersList){
+       customers.push_back(c->clone());
+   }
 }
+
+OpenTable::~OpenTable() { //destructor
+    for(auto  c:customers){
+        if(c!= nullptr){
+            delete c;
+            c =  nullptr;
+        }
+    }
+    customers.clear();
+}
+
 
 void OpenTable::act(Restaurant &restaurant) {
     if(restaurant.getTable(tableId)== nullptr||restaurant.getTable(tableId)->isOpen()) {
@@ -82,10 +96,11 @@ std::string OpenTable::toString() const {
     string output="open "+to_string(tableId)+" ";
 
     for(auto & c:customers){
-        output+=c->getName()+","+c->getmyType()+" ";
+       // output+=c->getName()+","+c->getmyType()+" ";
+        output+=c->toString();
     }
 
-    return output+printstatus()+"\n";
+    return output+" "+printstatus()+"\n";
 }
 //end OpenTable
 
@@ -212,10 +227,10 @@ std::string CloseAll::toString() const {
 
 //Print menu
 PrintMenu::PrintMenu():BaseAction() {}
+
 void PrintMenu::act(Restaurant &restaurant) {
     string output;
-    std::vector<Dish> menu(restaurant.getMenu());
-    for (auto &i : menu) {
+    for (auto &i : restaurant.getMenu()) {
         string dishType;
         if (i.getType()==ALC){
             dishType="ALC";
@@ -291,7 +306,7 @@ std::string PrintActionsLog::toString() const {
 }
 //end Action log
 
-//Backup Resturant
+//Backup Restaurant
 BackupRestaurant::BackupRestaurant():BaseAction(){}
 
 void BackupRestaurant::act(Restaurant &restaurant) {
@@ -311,9 +326,9 @@ void BackupRestaurant::act(Restaurant &restaurant) {
 std::string BackupRestaurant::toString() const {
     return "backup "+printstatus()+"\n";
 }
-// end Backup Resturant
+// end Backup Restaurant
 
-//Restore Resturant
+//Restore Restaurant
 RestoreResturant::RestoreResturant():BaseAction(){}
 
 void RestoreResturant::act(Restaurant &restaurant) {
@@ -331,5 +346,5 @@ void RestoreResturant::act(Restaurant &restaurant) {
 std::string RestoreResturant::toString() const {
     return "restore "+printstatus()+"\n";
 }
-//end Restore Resturant
+//end Restore Restaurant
 ///

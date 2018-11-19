@@ -16,8 +16,8 @@ class Restaurant{
 public:
     Restaurant();
     Restaurant(Restaurant &restaurant); ///copy constructor
-    Restaurant(Restaurant &&other); //move constructor
-    Restaurant&operator=(Restaurant&& other);//move assignment operator
+   // Restaurant(Restaurant &&other); //move constructor
+   // Restaurant&operator=(Restaurant&& other);//move assignment operator
     Restaurant&operator=(const Restaurant& other); //copy assignment operator
     virtual ~Restaurant();//destructor
     Restaurant(const std::string &configFilePath);
@@ -34,6 +34,7 @@ public:
 private:
     int costId;
     bool open;
+    int numOfTables;
     std::vector<Table*> tables;
     std::vector<Dish> menu;
     std::vector<BaseAction*> actionsLog;

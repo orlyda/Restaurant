@@ -30,8 +30,6 @@ public:
     void closeTable();
     int getBill();
     bool isOpen();
-   // void setorderspush(OrderPair orderPair);//***
-   // void setorderserase(int i);//***
 private:
     int capacity;
     bool open;
